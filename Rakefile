@@ -15,7 +15,7 @@ end
 app_pkg = manifest[:package]
 project = app_pkg.gsub(/\./, '_')
 
-sdk_location = ENV['ANDROID_SDK'] || '/Users/jan/projects/android-sdk-mac_x86-1.5_r1'
+sdk_location = ENV['ANDROID_SDK'] || '/Library/Android/android-sdk-mac_86'
 src = 'src'
 gen = 'gen'
 res = 'res'
@@ -26,8 +26,8 @@ classes = "#{bin}/classes"
 ap_ = "#{bin}/#{project}.ap_"
 apk = "#{bin}/#{project}.apk"
 
-android_jar = "#{sdk_location}/platforms/android-1.5/android.jar"
-android_aidl = "#{sdk_location}/platforms/android-1.5/framework.aidl"
+android_jar = "#{sdk_location}/platforms/android-8/android.jar"
+android_aidl = "#{sdk_location}/platforms/android-8/framework.aidl"
 intermediate_dex_location = "#{bin}/classes.dex"
 
 directory gen
@@ -119,21 +119,21 @@ task :reinstall => :debug do
   adb 'install', '-r', apk
 end
 
-desc "uninstall the application from a running emulator or device (DEVICE=<serialno>)."
+desc "Uninstall the application from a running emulator or device (DEVICE=<serialno>)."
 task :uninstall do
-  adb 'uninstall',  app_pkg
+  adb 'uninstall', app_pkg
 end
 
 namespace :package do
-  desc "verify signature of the package."
+  desc "Verify signature of the package."
   task :verify do
-     sh "jarsigner",  "-verify",  "-certs", "-verbose", apk
+     sh "jarsigner", "-verify",  "-certs", "-verbose", apk
   end
 
-  desc "sign the package."
+  desc "Sign the package."
   task :sign do
     alias_name = "alias"
     keystore   = "keystore"
-    sh "jarsigner",  "-verbose",  "-keystore", keystore, apk, alias_name
+    sh "jarsigner", "-verbose", "-keystore", keystore, apk, alias_name
   end
 end
