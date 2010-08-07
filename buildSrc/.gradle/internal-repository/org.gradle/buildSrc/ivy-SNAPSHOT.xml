@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="1.0">
+	<info organisation="org.gradle"
+		module="buildSrc"
+		revision="SNAPSHOT"
+		status="integration"
+		publication="20100807144006"
+	/>
+	<configurations>
+		<conf name="archives" visibility="public" description="Configuration for the default artifacts."/>
+		<conf name="compile" visibility="private" description="Classpath for compiling the sources." extends="groovy"/>
+		<conf name="default" visibility="public" description="Configuration the default artifacts and its dependencies." extends="archives,runtime"/>
+		<conf name="groovy" visibility="private" description="The groovy libraries to be used for this Groovy project."/>
+		<conf name="runtime" visibility="private" description="Classpath for running the compiled sources." extends="compile"/>
+		<conf name="testCompile" visibility="private" description="Classpath for compiling the test sources." extends="compile"/>
+		<conf name="testRuntime" visibility="private" description="Classpath for running the test sources." extends="runtime,testCompile"/>
+	</configurations>
+	<publications>
+		<artifact name="buildSrc" type="jar" ext="jar" conf="archives"/>
+	</publications>
+</ivy-module>
