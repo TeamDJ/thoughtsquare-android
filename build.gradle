@@ -1,8 +1,20 @@
-ant.properties['sdk.dir'] = System.getenv()['ANDROID_SDK']
-apply plugin: com.jvoegele.gradle.plugins.android.AndroidPlugin 
+allprojects{
+    ant.properties['sdk.dir'] = System.getenv()['ANDROID_SDK']
+    apply plugin: com.jvoegele.gradle.plugins.android.AndroidPlugin 
 
-repositories {
-    mavenCentral()
+    repositories {
+        mavenCentral()
+    }
+}
+
+task hello << {
+    println project.name
+}
+
+project(':functional-tests'){
+   dependencies{
+    compile rootProject
+   }
 }
 
 

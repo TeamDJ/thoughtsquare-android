@@ -12,6 +12,7 @@ public class ThoughtSquareActivityTest extends ActivityInstrumentationTestCase2<
         super("teamdj.thoughtsquare", ThoughtSquareActivity.class);
     }
 
+    
     public void testWelcomeTextIsPresent(){
         TextView textView = (TextView) getActivity().findViewById(R.id.welcome_label);
         assertEquals("Hello World, ThoughtSquareActivity", textView.getText());
