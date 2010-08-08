@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/functional-tests/functional-tests.iml" filepath="$PROJECT_DIR$/functional-tests/functional-tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/thoughtsquare-android.iml" filepath="$PROJECT_DIR$/thoughtsquare-android.iml" />
     </modules>
   </component>
