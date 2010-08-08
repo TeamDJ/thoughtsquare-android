@@ -1,8 +1,7 @@
-package com.thoughtworks.teamdj.thoughtsquare;
+package teamdj.thoughtsquare;
 
 import android.app.Activity;
 import android.os.Bundle;
-import com.thoughtworks.teamdj.thoughtsquare.R;
 
 public class ThoughtSquareActivity extends Activity
 {
