@@ -7,10 +7,6 @@ allprojects{
     }
 }
 
-task hello << {
-    println project.name
-}
-
 project(':functional-tests'){
    dependencies{
     compile rootProject
