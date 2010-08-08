@@ -1,0 +1,6 @@
+To build with gradle:
+
+1. you need gradle-0.9 installed (download it and add it to path)
+2. set environment variable ANDROID_SDK to point at where you installed your
+android sdk
+3. run gradle build

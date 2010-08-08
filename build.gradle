@@ -1,6 +1,10 @@
 ant.properties['sdk.dir'] = System.getenv()['ANDROID_SDK']
-ant.properties['target'] = 'android-8'
 apply plugin: com.jvoegele.gradle.plugins.android.AndroidPlugin 
+
+repositories {
+    mavenCentral()
+}
+
 
 
 
