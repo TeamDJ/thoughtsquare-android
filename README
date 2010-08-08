@@ -1,6 +1,8 @@
 To run build:
 
-1. Start android emulator `emulator -avd my_avd`
-2. `cd functional-tests`
-3. `ant run-tests`
+- ensure you have a local.properties file with sdk.dir property set to your
+  android sdk location
+- Start android emulator `emulator -avd my_avd`
+- `cd functional-tests`
+- `ant run-tests`
 
