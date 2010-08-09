@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ThoughtSquareActivity</string>
+    <string name="register">Register</string>
+    <string name="displayNameLabel">Name</string>
+    <string name="usernameLabel">TW Email</string>
 </resources>

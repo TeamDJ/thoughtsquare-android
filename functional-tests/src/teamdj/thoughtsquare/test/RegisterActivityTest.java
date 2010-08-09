@@ -1,4 +1,4 @@
-package thoughtsquare.test;
+package teamdj.thoughtsquare.test;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
@@ -15,7 +15,7 @@ public class RegisterActivityTest extends ActivityInstrumentationTestCase2<Regis
         super("teamdj.thoughtsquare", RegisterActivity.class);
     }
 
-    
+
 //    public void testRegistration(){
 //
 //        EditText displayNameField = (EditText) getActivity().findViewById(R.id.displayNameField);
