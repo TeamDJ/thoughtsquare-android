@@ -23,12 +23,14 @@ public class ThoughtSquareActivityTest extends ActivityInstrumentationTestCase2<
     }
 
 
-    public void testWelcomeTextIsPresent() {
-        solo.assertCurrentActivity("Expected ThoughtSquareActivity activity", "ThoughtSquareActivity");
+    public void testLaunchesRegisterActivity() {
 
+        solo.enterText(0, "Julian Oliver");
+        solo.enterText(1, "joliver@thoughtworks.com");
+        solo.clickOnButton("Register");
 
-        TextView textView = (TextView) getActivity().findViewById(R.id.welcome_label);
-        assertEquals("Hello World, ThoughtSquareActivity", textView.getText().toString());
+//        TextView textView = (TextView) getActivity().findViewById(R.id.welcome_label);
+//        assertEquals("Hello World, ThoughtSquareActivity", textView.getText().toString());
     }
 
 

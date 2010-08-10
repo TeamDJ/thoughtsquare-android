@@ -14,9 +14,9 @@ public class ThoughtSquareActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-//
-//        Intent i = new Intent(this, RegisterActivity.class);
-//        startActivityForResult(i, REGISTER_ACTIVITY);
+
+        Intent i = new Intent(this, RegisterActivity.class);
+        startActivityForResult(i, REGISTER_ACTIVITY);
     }
 
 
