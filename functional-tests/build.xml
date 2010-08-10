@@ -62,6 +62,11 @@
          This will ensure that the properties are setup correctly but that your customized
          build steps are used.
     -->
-    <setup />
+
+    <property name="external.libs.dir" value="test-libs" />
+    <property name="external.libs.absolute.dir" location="${external.libs.dir}" />
+
+    <setup import="false"/>
+    <import file="android_test_rules.xml" />
 
 </project>
