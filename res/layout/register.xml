@@ -10,14 +10,14 @@
     <TextView android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@string/displayNameLabel" />
-	<EditText android:id="@+id/displayNameField" android:layout_width="match_parent"
+	<EditText android:id="@+id/displayName" android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_weight="1"
 		android:scrollbars="vertical" />
     <TextView android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="@string/usernameLabel" />
-	<EditText android:id="@+id/usernameField" android:layout_width="match_parent"
+	<EditText android:id="@+id/emailAddress" android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_weight="1"
 		android:scrollbars="vertical" />

@@ -39,7 +39,7 @@ public class ThoughtSquareActivity extends Activity {
         Bundle extras = intent.getExtras();
         switch(requestCode) {
             case REGISTER_ACTIVITY:
-                greetUser(extras.getString("display"));
+                greetUser(extras.getString("displayName"));
                 break;
         }
     }
