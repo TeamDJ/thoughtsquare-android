@@ -12,6 +12,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.RegisterActivity" />
+        <activity android:name=".activity.UpdateLocationActivity" />
     </application>
     <uses-permission android:name="android.permission.INTERNET" />
 </manifest> 

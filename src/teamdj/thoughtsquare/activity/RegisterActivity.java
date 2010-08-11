@@ -50,7 +50,7 @@ public class RegisterActivity extends Activity {
                     finish();
                 }
 
-
+                //TODO: What to do when service cannot register user?
             }
 
         });
