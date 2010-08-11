@@ -52,6 +52,10 @@ public class ThoughtSquareActivity extends Activity {
             case REGISTER_ACTIVITY:
                 greetUser(extras.getString("displayName"));
                 break;
+            case UPDATE_LOCATION_ACTIVITY:
+                TextView currentLocation = (TextView)findViewById(R.id.current_location);
+                currentLocation.setText(extras.getString("cityName"));
+                break;
         }
     }
 
