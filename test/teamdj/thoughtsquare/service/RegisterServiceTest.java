@@ -1,14 +1,15 @@
 package teamdj.thoughtsquare.service;
 
+import org.junit.Before;
 import org.junit.Test;
 import teamdj.thoughtsquare.utility.AHTTPClient;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.anyMap;
-import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -23,11 +24,17 @@ import static org.mockito.Mockito.when;
 public class RegisterServiceTest {
     private static final String MY_EMAIL = "my email";
     private static final String MY_DISPLAY = "my display";
+    private AHTTPClient client;
+    private RegisterService service;
+
+    @Before
+    public void setup(){
+        client = mock(AHTTPClient.class);
+        service = new RegisterService(client);
+    }
 
     @Test
     public void shouldSendEmailAndDisplayToServer() {
-        AHTTPClient client = mock(AHTTPClient.class);
-        RegisterService service = new RegisterService(client);
 
         when(client.post(anyString(), anyMap())).thenReturn(201);
 
@@ -38,5 +45,15 @@ public class RegisterServiceTest {
         postParams.put("user[email]", MY_EMAIL);
 
         verify(client).post("http://thoughtsquare.heroku.com/users/", postParams);
+    }
+
+    @Test
+    public void shouldReturnFalseWhenPostToCreateUserFailed() {
+        when(client.post(anyString(), anyMap())).thenReturn(422);
+
+         assertFalse(service.register(MY_EMAIL, MY_DISPLAY));
+
+        verify(client).post(eq("http://thoughtsquare.heroku.com/users/"), anyMap());
+
     }
 }
