@@ -1,4 +1,4 @@
-package teamdj.thoughtsquare;
+package teamdj.thoughtsquare.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import teamdj.thoughtsquare.R;
 
 import static teamdj.thoughtsquare.Preferences.DEFAULT;
 import static teamdj.thoughtsquare.Preferences.DISPLAY_NAME;
@@ -33,6 +34,8 @@ public class RegisterActivity extends Activity
             public void onClick(View view) {
                 String displayName = displayNameField.getText().toString();
                 String username= usernameField.getText().toString();
+
+                
 
                 Bundle extras = new Bundle();
                 extras.putString("display", displayName);

@@ -1,9 +1,10 @@
-package teamdj.thoughtsquare;
+package teamdj.thoughtsquare.activity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
+import teamdj.thoughtsquare.R;
 
 import static teamdj.thoughtsquare.Preferences.DEFAULT;
 import static teamdj.thoughtsquare.Preferences.DISPLAY_NAME;
