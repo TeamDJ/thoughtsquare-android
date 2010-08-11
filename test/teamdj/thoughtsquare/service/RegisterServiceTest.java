@@ -24,6 +24,8 @@ import static org.mockito.Mockito.when;
 public class RegisterServiceTest {
     private static final String MY_EMAIL = "my email";
     private static final String MY_DISPLAY = "my display";
+    private static final String REGISTER_URL = "http://thoughtsquare.heroku.com/users.json";
+    
     private AHTTPClient client;
     private RegisterService service;
 
@@ -44,7 +46,7 @@ public class RegisterServiceTest {
         postParams.put("user[display_name]", MY_DISPLAY);
         postParams.put("user[email]", MY_EMAIL);
 
-        verify(client).post("http://thoughtsquare.heroku.com/users/", postParams);
+        verify(client).post(REGISTER_URL, postParams);
     }
 
     @Test
@@ -53,7 +55,7 @@ public class RegisterServiceTest {
 
          assertFalse(service.register(MY_EMAIL, MY_DISPLAY));
 
-        verify(client).post(eq("http://thoughtsquare.heroku.com/users/"), anyMap());
+        verify(client).post(eq(REGISTER_URL), anyMap());
 
     }
 }

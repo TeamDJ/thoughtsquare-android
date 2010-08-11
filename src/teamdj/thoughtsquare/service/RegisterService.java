@@ -27,7 +27,7 @@ public class RegisterService {
         postParams.put("user[display_name]", displayName);
         postParams.put("user[email]", emailAddress);
 
-        int status = client.post("http://thoughtsquare.heroku.com/users/", postParams);
+        int status = client.post("http://thoughtsquare.heroku.com/users.json", postParams);
 
         return status == 201;
 
