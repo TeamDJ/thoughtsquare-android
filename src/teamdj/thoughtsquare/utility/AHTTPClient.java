@@ -34,6 +34,10 @@ public class AHTTPClient {
             throw new RuntimeException("Error POSTing", e);
         }
 
+        return getResponse(httpClient, post, response);
+    }
+
+    private AHTTPResponse getResponse(HttpClient httpClient, HttpPost post, HttpResponse response) {
         String responseBody = null;
         int responseStatus = response.getStatusLine().getStatusCode();
 

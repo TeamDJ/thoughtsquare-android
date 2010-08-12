@@ -32,7 +32,6 @@ public class AHTTPClientIntegrationTest {
 
         assertThat(response.getResponseStatus(), is(HttpStatus.SC_CREATED));
         assertThat(response.getResponseBody(), not(isNull()));
-        System.out.println(response.getResponseBody());
     }
 
     //TODO: Clean up created user after test.
