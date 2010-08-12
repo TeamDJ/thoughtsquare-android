@@ -3,6 +3,7 @@ package teamdj.thoughtsquare.service;
 import org.junit.Before;
 import org.junit.Test;
 import teamdj.thoughtsquare.utility.AHTTPClient;
+import teamdj.thoughtsquare.utility.AHTTPResponse;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +32,9 @@ public class UserServiceTest {
 
     @Test
     public void shouldSendEmailAndDisplayToServer() {
-        when(client.post(anyString(), anyMap())).thenReturn(201);
+        AHTTPResponse response = mock(AHTTPResponse.class);
+        when(response.getResponseStatus()).thenReturn(201);
+        when(client.post(anyString(), anyMap())).thenReturn(response);
 
         assertTrue(service.register(MY_EMAIL, MY_DISPLAY));
 
@@ -44,7 +47,9 @@ public class UserServiceTest {
 
     @Test
     public void shouldReturnFalseWhenPostToCreateUserFailed() {
-        when(client.post(anyString(), anyMap())).thenReturn(422);
+        AHTTPResponse response = mock(AHTTPResponse.class);
+        when(response.getResponseStatus()).thenReturn(422);
+        when(client.post(anyString(), anyMap())).thenReturn(response);
 
         assertFalse(service.register(MY_EMAIL, MY_DISPLAY));
 

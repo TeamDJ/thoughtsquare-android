@@ -1,11 +1,16 @@
 package teamdj.thoughtsquare.utility;
 
+import org.apache.http.HttpStatus;
 import org.junit.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Matchers.isNull;
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,16 +22,17 @@ import static org.junit.Assert.assertEquals;
 public class AHTTPClientIntegrationTest {
     @Test
     public void testPost() throws Exception {
-
         AHTTPClient ahttpClient = new AHTTPClient();
 
         Map<String, String> postParams = new HashMap<String, String>();
         postParams.put("user[display_name]", "foo");
         postParams.put("user[email]", "foo@bar.com");
 
-        int status = ahttpClient.post("http://thoughtsquare.heroku.com/users.json", postParams);
+        AHTTPResponse response = ahttpClient.post("http://thoughtsquare.heroku.com/users.json", postParams);
 
-        assertEquals(201, status);
+        assertThat(response.getResponseStatus(), is(HttpStatus.SC_CREATED));
+        assertThat(response.getResponseBody(), not(isNull()));
+        System.out.println(response.getResponseBody());
     }
 
     //TODO: Clean up created user after test.

@@ -1,6 +1,7 @@
 package teamdj.thoughtsquare.service;
 
 import teamdj.thoughtsquare.utility.AHTTPClient;
+import teamdj.thoughtsquare.utility.AHTTPResponse;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,8 +19,8 @@ public class UserService {
         postParams.put("user[display_name]", displayName);
         postParams.put("user[email]", emailAddress);
 
-        int status = client.post("http://thoughtsquare.heroku.com/users.json", postParams);
+        AHTTPResponse status = client.post("http://thoughtsquare.heroku.com/users.json", postParams);
 
-        return status == 201;
+        return status.getResponseStatus() == 201;
     }
 }
