@@ -1,17 +1,13 @@
 package teamdj.thoughtsquare.test;
 
-import android.os.Bundle;
-import android.preference.Preference;
 import android.test.ActivityInstrumentationTestCase2;
-import android.test.UiThreadTest;
 import android.widget.TextView;
-//import com.jayway.android.robotium.solo.Solo;
 import com.jayway.android.robotium.solo.Solo;
 import teamdj.thoughtsquare.Preferences;
 import teamdj.thoughtsquare.R;
-import teamdj.thoughtsquare.ThoughtSquareActivity;
+import teamdj.thoughtsquare.activity.ThoughtSquareActivity;
 
-import static teamdj.thoughtsquare.Preferences.*;
+import static teamdj.thoughtsquare.Preferences.DEFAULT;
 
 
 public class ThoughtSquareActivityTest extends ActivityInstrumentationTestCase2<ThoughtSquareActivity> {
@@ -31,42 +27,32 @@ public class ThoughtSquareActivityTest extends ActivityInstrumentationTestCase2<
        
     }
 
-    public void testAAA(){
 
-
-    }
-
-
-    public void testRegistration() {
+    // only works for a newly installed app that doesnt have user details saved
+    public void testEverythingThatMatters() {
         solo.waitForText("TW Email");
-       
+
         solo.enterText(0, "Julian Oliver");
         solo.enterText(1, "joliver@thoughtworks.com");
         solo.clickOnButton("Register");
 
-        TextView textView = (TextView) activity.findViewById(R.id.welcome_label);
-        assertEquals("Hello Julian Oliver", textView.getText().toString());
+        solo.waitForText("Hello");
+        assertEquals("Hello Julian Oliver", getText(R.id.welcome_label));
+        assertEquals("Unknown", getText(R.id.current_location));
 
-
-
-    }
-
-
-    public void testAlreadyRegistered(){
-        getInstrumentation().getContext().getSharedPreferences(DEFAULT, 2).edit().putString(Preferences.DISPLAY_NAME, "Meow");
-
-        getInstrumentation().callActivityOnResume(activity);
-
-        TextView textView = (TextView) activity.findViewById(R.id.welcome_label);
-        assertEquals("Hello Meow", textView.getText().toString());
-
-        solo.assertCurrentActivity("Expected ThoughtSquareActivity", ThoughtSquareActivity.class);
+        solo.clickOnButton("Update Location");
+        solo.clickInList(0);
+        solo.waitForText("Hello");
+        assertEquals("Perth", getText(R.id.current_location));
 
 
     }
 
-
-
+    private String getText(int viewId) {
+        TextView textView = (TextView) activity.findViewById(viewId);
+        String text = textView.getText().toString();
+        return text;
+    }
 
 
     @Override

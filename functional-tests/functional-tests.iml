@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module type="ANDROID_MODULE" version="4">
+<module type="JAVA_MODULE" version="4">
   <component name="FacetManager">
     <facet type="android" name="Android">
       <configuration>
@@ -10,8 +10,6 @@
     </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
-    <output url="file://$MODULE_DIR$/../out/production/functional-tests" />
-    <output-test url="file://$MODULE_DIR$/../out/test/functional-tests" />
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/gen" isTestSource="false" />
@@ -19,8 +17,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="thoughtsquare-android" />
-    <orderEntry type="library" scope="PROVIDED" name="Android 2.2 Platform" level="application" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -30,6 +26,8 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module" module-name="Thoughtsquare-android" />
+    <orderEntry type="library" scope="PROVIDED" name="Android 2.2 Platform" level="application" />
   </component>
 </module>
 

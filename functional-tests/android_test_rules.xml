@@ -22,7 +22,7 @@
         <element name="extra-instrument-args" optional="yes" />
         <sequential>
             <echo>Running tests ...</echo>
-            <exec executable="${adb}" failonerror="true">
+            <exec executable="${adb}" failonerror="true" outputproperty="test.out">
                 <arg value="shell" />
                 <arg value="am" />
                    <arg value="instrument" />
@@ -33,6 +33,12 @@
                 <extra-instrument-args />
                 <arg value="${manifest.package}/${test.runner}" />
             </exec>
+            <echo>${test.out}</echo>
+            <fail>
+                <condition>
+                    <contains string="${test.out}" substring="FAILURES!!!"/>
+                </condition>
+            </fail>
         </sequential>
     </macrodef>
 
@@ -52,7 +58,17 @@
         </subant>
     </target>
 
-    <target name="run-tests" depends="-install-tested-project, install"
+     <target name="-uninstall-tested-project">
+        <subant target="uninstall">
+            <fileset dir="${tested.project.absolute.dir}" includes="build.xml" />
+        </subant>
+    </target>
+
+    <target name="test-setup" depends="-uninstall-tested-project">
+       
+    </target>
+
+    <target name="run-tests" depends="test-setup, -install-tested-project, install"
                 description="Runs tests from the package defined in test.package property">
         <run-tests-helper />
     </target>
