@@ -1,26 +1,22 @@
 package teamdj.thoughtsquare.utility;
 
-import org.apache.http.HttpRequest;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 
 public class AHTTPClient {
-    public int post(String url, Map<String, String> postParams) {
+    public AHTTPResponse post(String url, Map<String, String> postParams) {
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost post = new HttpPost(url);
 
@@ -38,7 +34,43 @@ public class AHTTPClient {
             throw new RuntimeException("Error POSTing", e);
         }
 
-        return response.getStatusLine().getStatusCode(); //To change body of created methods use File | Settings | File Templates.
+        return getResponse(httpClient, post, response);
+    }
+
+    private AHTTPResponse getResponse(HttpClient httpClient, HttpPost post, HttpResponse response) {
+        String responseBody = null;
+        int responseStatus = response.getStatusLine().getStatusCode();
+
+        HttpEntity entity = response.getEntity();
+
+        if (entity != null) {
+            InputStream instream;
+            try {
+                instream = entity.getContent();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(instream));
+                try {
+                    responseBody = reader.readLine();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            } catch (RuntimeException ex) {
+                post.abort();
+                throw ex;
+            } finally {
+                try {
+                    instream.close();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            httpClient.getConnectionManager().shutdown();
+        }
+
+        return new AHTTPResponse(responseStatus, responseBody);
     }
 
     private List<NameValuePair> getParams(Map<String, String> postParams) {

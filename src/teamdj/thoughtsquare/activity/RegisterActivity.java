@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import teamdj.thoughtsquare.Preferences;
 import teamdj.thoughtsquare.R;
-import teamdj.thoughtsquare.service.RegisterService;
+import teamdj.thoughtsquare.service.UserService;
 import teamdj.thoughtsquare.utility.AHTTPClient;
 
 import static teamdj.thoughtsquare.Preferences.*;
@@ -35,7 +35,7 @@ public class RegisterActivity extends Activity {
                 String displayName = displayNameField.getText().toString();
                 String emailAddress = emailAddressField.getText().toString();
 
-                RegisterService service = new RegisterService(new AHTTPClient());
+                UserService service = new UserService(new AHTTPClient());
                 if (service.register(emailAddress, displayName)) {
                     Bundle extras = new Bundle();
                     extras.putString("displayName", displayName);

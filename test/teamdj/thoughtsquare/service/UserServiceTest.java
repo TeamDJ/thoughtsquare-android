@@ -3,42 +3,38 @@ package teamdj.thoughtsquare.service;
 import org.junit.Before;
 import org.junit.Test;
 import teamdj.thoughtsquare.utility.AHTTPClient;
+import teamdj.thoughtsquare.utility.AHTTPResponse;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.anyMap;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.*;
 
-/**
- * Created by IntelliJ IDEA.
- * User: jottaway
- * Date: Aug 11, 2010
- * Time: 1:49:45 PM
- * To change this template use File | Settings | File Templates.
- */
-public class RegisterServiceTest {
+public class UserServiceTest {
     private static final String MY_EMAIL = "my email";
     private static final String MY_DISPLAY = "my display";
     private static final String REGISTER_URL = "http://thoughtsquare.heroku.com/users.json";
-    
+
     private AHTTPClient client;
-    private RegisterService service;
+    private UserService service;
 
     @Before
-    public void setup(){
+    public void setup() {
         client = mock(AHTTPClient.class);
-        service = new RegisterService(client);
+
+        service = new UserService(client);
     }
 
     @Test
     public void shouldSendEmailAndDisplayToServer() {
-
-        when(client.post(anyString(), anyMap())).thenReturn(201);
+        AHTTPResponse response = mock(AHTTPResponse.class);
+        when(response.getResponseStatus()).thenReturn(201);
+        when(client.post(anyString(), anyMap())).thenReturn(response);
 
         assertTrue(service.register(MY_EMAIL, MY_DISPLAY));
 
@@ -51,11 +47,12 @@ public class RegisterServiceTest {
 
     @Test
     public void shouldReturnFalseWhenPostToCreateUserFailed() {
-        when(client.post(anyString(), anyMap())).thenReturn(422);
+        AHTTPResponse response = mock(AHTTPResponse.class);
+        when(response.getResponseStatus()).thenReturn(422);
+        when(client.post(anyString(), anyMap())).thenReturn(response);
 
-         assertFalse(service.register(MY_EMAIL, MY_DISPLAY));
+        assertFalse(service.register(MY_EMAIL, MY_DISPLAY));
 
         verify(client).post(eq(REGISTER_URL), anyMap());
-
     }
 }
