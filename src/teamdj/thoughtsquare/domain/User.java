@@ -25,12 +25,4 @@ public class User {
     public String getDisplayName() {
         return displayName;
     }
-
-    public static User fromJSON(String input) throws JSONException {
-        JSONObject jsonUser = new JSONObject(input).getJSONObject("user");
-        int id = jsonUser.getInt("id");
-        String email = jsonUser.getString("email");
-        String displayName = jsonUser.getString("display_name");
-        return new User(id, email, displayName);
-    }
 }
