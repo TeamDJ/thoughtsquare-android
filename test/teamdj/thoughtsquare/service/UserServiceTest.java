@@ -1,13 +1,18 @@
 package teamdj.thoughtsquare.service;
 
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
+import teamdj.thoughtsquare.builder.UserBuilder;
+import teamdj.thoughtsquare.domain.User;
 import teamdj.thoughtsquare.utility.AHTTPClient;
 import teamdj.thoughtsquare.utility.AHTTPResponse;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyMap;
@@ -18,41 +23,56 @@ import static org.mockito.Mockito.*;
 public class UserServiceTest {
     private static final String MY_EMAIL = "my email";
     private static final String MY_DISPLAY = "my display";
+    private static final String USER_JSON = "json representation of a user";
     private static final String REGISTER_URL = "http://thoughtsquare.heroku.com/users.json";
 
     private AHTTPClient client;
     private UserService service;
+    private UserBuilder builder;
+    private AHTTPResponse response;
+    private User user;
 
     @Before
     public void setup() {
         client = mock(AHTTPClient.class);
+        builder = mock(UserBuilder.class);
 
-        service = new UserService(client);
+        service = new UserService(client, builder);
+
+        response = mock(AHTTPResponse.class);
+        user = mock(User.class);
     }
 
     @Test
-    public void shouldSendEmailAndDisplayToServer() {
-        AHTTPResponse response = mock(AHTTPResponse.class);
-        when(response.getResponseStatus()).thenReturn(201);
+    public void shouldSendEmailAndDisplayToServerAndReturnUser() {
         when(client.post(anyString(), anyMap())).thenReturn(response);
+        when(response.getResponseStatus()).thenReturn(201);
+        when(response.getResponseBody()).thenReturn(USER_JSON);
+        when(builder.fromJSON(USER_JSON)).thenReturn(user);
 
-        assertTrue(service.register(MY_EMAIL, MY_DISPLAY));
+        assertThat(service.register(MY_EMAIL, MY_DISPLAY), equalTo(user));
 
-        Map<String, String> postParams = new HashMap<String, String>();
-        postParams.put("user[display_name]", MY_DISPLAY);
-        postParams.put("user[email]", MY_EMAIL);
-
-        verify(client).post(REGISTER_URL, postParams);
+        verify(client).post(REGISTER_URL, verifyPostParams());
+        verify(builder).fromJSON(USER_JSON);
     }
 
     @Test
     public void shouldReturnFalseWhenPostToCreateUserFailed() {
-        AHTTPResponse response = mock(AHTTPResponse.class);
-        when(response.getResponseStatus()).thenReturn(422);
         when(client.post(anyString(), anyMap())).thenReturn(response);
+        when(response.getResponseStatus()).thenReturn(422);
+        when(response.getResponseBody()).thenReturn(USER_JSON);
+        when(builder.fromJSON(USER_JSON)).thenReturn(null);
 
-        assertFalse(service.register(MY_EMAIL, MY_DISPLAY));
+        assertThat(service.register(MY_EMAIL, MY_DISPLAY), equalTo(null));
 
-        verify(client).post(eq(REGISTER_URL), anyMap());
+        verify(client).post(REGISTER_URL, verifyPostParams());
+        verify(builder, never()).fromJSON(USER_JSON);
+    }
+
+    private Map<String, String> verifyPostParams() {
+        Map<String, String> postParams = new HashMap<String, String>();
+        postParams.put("user[display_name]", MY_DISPLAY);
+        postParams.put("user[email]", MY_EMAIL);
+        return postParams;
     }
 }
