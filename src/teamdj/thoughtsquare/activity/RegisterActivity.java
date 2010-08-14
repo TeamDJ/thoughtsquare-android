@@ -1,8 +1,10 @@
 package teamdj.thoughtsquare.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,6 +13,8 @@ import teamdj.thoughtsquare.R;
 import teamdj.thoughtsquare.service.UserService;
 import teamdj.thoughtsquare.utility.AHTTPClient;
 
+import static android.preference.PreferenceManager.getDefaultSharedPreferences;
+import static teamdj.thoughtsquare.Preferences.*;
 import static teamdj.thoughtsquare.Preferences.*;
 
 public class RegisterActivity extends Activity {
@@ -41,8 +45,8 @@ public class RegisterActivity extends Activity {
                     extras.putString("displayName", displayName);
                     extras.putString("emailAddress", emailAddress);
 
-                    getSharedPreferences(DEFAULT, MODE_WORLD_WRITEABLE).edit().putString(DISPLAY_NAME, displayName).commit();
-                    getSharedPreferences(DEFAULT, MODE_WORLD_WRITEABLE).edit().putString(Preferences.USERNAME, emailAddress).commit();
+                    getDefaultSharedPreferences(getContext()).edit().putString(DISPLAY_NAME, displayName).commit();
+                    getDefaultSharedPreferences(getContext()).edit().putString(USERNAME, emailAddress).commit();
 
                     Intent mIntent = new Intent();
                     mIntent.putExtras(extras);
@@ -54,5 +58,9 @@ public class RegisterActivity extends Activity {
             }
 
         });
+    }
+
+    private Context getContext() {
+        return this;
     }
 }

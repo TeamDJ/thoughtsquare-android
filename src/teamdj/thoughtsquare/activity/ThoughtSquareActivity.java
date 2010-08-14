@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -30,7 +31,7 @@ public class ThoughtSquareActivity extends Activity {
             }
         });
 
-        String displayName = getSharedPreferences(DEFAULT, MODE_WORLD_WRITEABLE).getString(DISPLAY_NAME, "Stranger");
+        String displayName = PreferenceManager.getDefaultSharedPreferences(this).getString(DISPLAY_NAME, "Stranger");
         if ("Stranger".equals(displayName)) {
             Intent i = new Intent(this, RegisterActivity.class);
             startActivityForResult(i, REGISTER_ACTIVITY);
