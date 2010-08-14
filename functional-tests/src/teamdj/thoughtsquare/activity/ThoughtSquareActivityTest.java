@@ -1,4 +1,4 @@
-package teamdj.thoughtsquare.test;
+package teamdj.thoughtsquare.activity;
 
 import android.os.Bundle;
 import android.preference.Preference;
@@ -9,7 +9,7 @@ import android.widget.TextView;
 import com.jayway.android.robotium.solo.Solo;
 import teamdj.thoughtsquare.Preferences;
 import teamdj.thoughtsquare.R;
-import teamdj.thoughtsquare.ThoughtSquareActivity;
+import teamdj.thoughtsquare.activity.ThoughtSquareActivity;
 
 import static teamdj.thoughtsquare.Preferences.*;
 

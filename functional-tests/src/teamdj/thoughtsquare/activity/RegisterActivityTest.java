@@ -1,12 +1,11 @@
-package teamdj.thoughtsquare.test;
+package teamdj.thoughtsquare.activity;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import teamdj.thoughtsquare.R;
-import teamdj.thoughtsquare.RegisterActivity;
-import teamdj.thoughtsquare.ThoughtSquareActivity;
+import teamdj.thoughtsquare.activity.RegisterActivity;
 
 
 public class RegisterActivityTest extends ActivityInstrumentationTestCase2<RegisterActivity> {
