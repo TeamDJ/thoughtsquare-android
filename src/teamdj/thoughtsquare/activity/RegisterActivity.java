@@ -4,23 +4,21 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import teamdj.thoughtsquare.Preferences;
 import teamdj.thoughtsquare.R;
 import teamdj.thoughtsquare.builder.UserBuilder;
 import teamdj.thoughtsquare.domain.User;
 import teamdj.thoughtsquare.service.UserService;
 import teamdj.thoughtsquare.utility.AHTTPClient;
+import teamdj.thoughtsquare.utility.Config;
+import teamdj.thoughtsquare.utility.ConfigLoader;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 import static teamdj.thoughtsquare.Preferences.*;
-import static teamdj.thoughtsquare.Preferences.*;
 
 public class RegisterActivity extends Activity {
-
 
     /**
      * Called when the activity is first created.
@@ -30,19 +28,17 @@ public class RegisterActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
 
-        final EditText displayNameField = (EditText) findViewById(R.id.displayName);
-        final EditText emailAddressField = (EditText) findViewById(R.id.emailAddress);
+        Config config = new ConfigLoader().getConfig(this);
+        final UserService userService = new UserService(config, new AHTTPClient(), new UserBuilder());
 
         Button registerButton = (Button) findViewById(R.id.registerButton);
-
         registerButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                String displayName = displayNameField.getText().toString();
-                String emailAddress = emailAddressField.getText().toString();
+                String displayName = getTextFromTextBox(R.id.displayName);
+                String emailAddress = getTextFromTextBox(R.id.emailAddress);
 
-                UserService service = new UserService(new AHTTPClient(), new UserBuilder());
-                User user = service.register(emailAddress, displayName);
+                User user = userService.register(emailAddress, displayName);
 
                 if (user != null) {
                     Bundle extras = new Bundle();
@@ -58,10 +54,14 @@ public class RegisterActivity extends Activity {
                     finish();
                 }
 
-                //TODO: What to do when service cannot register user?
+                //TODO: What to do when userService cannot register user?
             }
 
         });
+    }
+
+    private String getTextFromTextBox(int viewId) {
+        return ((EditText) findViewById(viewId)).getText().toString();
     }
 
     private Context getContext() {

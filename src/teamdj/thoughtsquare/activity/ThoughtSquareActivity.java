@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import teamdj.thoughtsquare.R;
 
+import static android.preference.PreferenceManager.*;
 import static teamdj.thoughtsquare.Preferences.DEFAULT;
 import static teamdj.thoughtsquare.Preferences.DISPLAY_NAME;
 
@@ -31,7 +32,7 @@ public class ThoughtSquareActivity extends Activity {
             }
         });
 
-        String displayName = PreferenceManager.getDefaultSharedPreferences(this).getString(DISPLAY_NAME, "Stranger");
+        String displayName = getDefaultSharedPreferences(this).getString(DISPLAY_NAME, "Stranger");
         if ("Stranger".equals(displayName)) {
             Intent i = new Intent(this, RegisterActivity.class);
             startActivityForResult(i, REGISTER_ACTIVITY);

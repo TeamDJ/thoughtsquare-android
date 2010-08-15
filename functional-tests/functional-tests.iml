@@ -28,6 +28,7 @@
     </orderEntry>
     <orderEntry type="module" module-name="Thoughtsquare-android" />
     <orderEntry type="library" scope="PROVIDED" name="Android 2.2 Platform" level="application" />
+    <orderEntry type="module" module-name="thoughtsquare-android" />
   </component>
 </module>
 

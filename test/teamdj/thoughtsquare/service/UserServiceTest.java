@@ -7,6 +7,7 @@ import teamdj.thoughtsquare.builder.UserBuilder;
 import teamdj.thoughtsquare.domain.User;
 import teamdj.thoughtsquare.utility.AHTTPClient;
 import teamdj.thoughtsquare.utility.AHTTPResponse;
+import teamdj.thoughtsquare.utility.Config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,16 +37,18 @@ public class UserServiceTest {
     public void setup() {
         client = mock(AHTTPClient.class);
         builder = mock(UserBuilder.class);
-
-        service = new UserService(client, builder);
-
+        Config config = mock(Config.class);
         response = mock(AHTTPResponse.class);
         user = mock(User.class);
+
+        when(config.getServerBaseURL()).thenReturn("http://thoughtsquare.heroku.com");
+        when(client.post(anyString(), anyMap())).thenReturn(response);
+
+        service = new UserService(config,client, builder);
     }
 
     @Test
     public void shouldSendEmailAndDisplayToServerAndReturnUser() {
-        when(client.post(anyString(), anyMap())).thenReturn(response);
         when(response.getResponseStatus()).thenReturn(201);
         when(response.getResponseBody()).thenReturn(USER_JSON);
         when(builder.fromJSON(USER_JSON)).thenReturn(user);
@@ -58,10 +61,8 @@ public class UserServiceTest {
 
     @Test
     public void shouldReturnFalseWhenPostToCreateUserFailed() {
-        when(client.post(anyString(), anyMap())).thenReturn(response);
         when(response.getResponseStatus()).thenReturn(422);
         when(response.getResponseBody()).thenReturn(USER_JSON);
-        when(builder.fromJSON(USER_JSON)).thenReturn(null);
 
         assertThat(service.register(MY_EMAIL, MY_DISPLAY), equalTo(null));
 

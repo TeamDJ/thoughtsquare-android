@@ -6,15 +6,18 @@ import teamdj.thoughtsquare.builder.UserBuilder;
 import teamdj.thoughtsquare.domain.User;
 import teamdj.thoughtsquare.utility.AHTTPClient;
 import teamdj.thoughtsquare.utility.AHTTPResponse;
+import teamdj.thoughtsquare.utility.Config;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class UserService {
+    private Config config;
     private AHTTPClient client;
     private UserBuilder builder;
 
-    public UserService(AHTTPClient client, UserBuilder builder) {
+    public UserService(Config config, AHTTPClient client, UserBuilder builder) {
+        this.config = config;
         this.client = client;
         this.builder = builder;
     }
@@ -24,7 +27,7 @@ public class UserService {
         postParams.put("user[display_name]", displayName);
         postParams.put("user[email]", emailAddress);
 
-        AHTTPResponse status = client.post("http://thoughtsquare.heroku.com/users.json", postParams);
+        AHTTPResponse status = client.post(config.getServerBaseURL() + "    /users.json", postParams);
 
         User user = null;
         if (status.getResponseStatus() == HttpStatus.SC_CREATED) {

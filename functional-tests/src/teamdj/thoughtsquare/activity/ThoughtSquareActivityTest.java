@@ -3,11 +3,7 @@ package teamdj.thoughtsquare.activity;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.TextView;
 import com.jayway.android.robotium.solo.Solo;
-import teamdj.thoughtsquare.Preferences;
 import teamdj.thoughtsquare.R;
-import teamdj.thoughtsquare.activity.ThoughtSquareActivity;
-
-import static teamdj.thoughtsquare.Preferences.DEFAULT;
 
 
 public class ThoughtSquareActivityTest extends ActivityInstrumentationTestCase2<ThoughtSquareActivity> {
@@ -58,7 +54,6 @@ public class ThoughtSquareActivityTest extends ActivityInstrumentationTestCase2<
     @Override
     public void tearDown() throws Exception {
 
-        getActivity().getSharedPreferences(DEFAULT, 2).edit().putString(Preferences.DISPLAY_NAME, null);
         try {
             solo.finalize();
         } catch (Throwable e) {
