@@ -52,4 +52,8 @@ public class User {
             return false;
         }
     }
+
+    public void updateLocation(){
+        // call client to update location here.
+    }
 }
