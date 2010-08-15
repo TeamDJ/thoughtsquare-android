@@ -1,8 +1,6 @@
 package teamdj.thoughtsquare.domain;
 
 import org.apache.http.HttpStatus;
-import org.json.JSONException;
-import org.json.JSONObject;
 import teamdj.thoughtsquare.utility.AHTTPClient;
 import teamdj.thoughtsquare.utility.AHTTPResponse;
 import teamdj.thoughtsquare.utility.Config;
@@ -45,12 +43,7 @@ public class User {
         AHTTPResponse status = client.post(config.getServerBaseURL() + "/users.json", postParams);
 
         if (status.getResponseStatus() == HttpStatus.SC_CREATED) {
-            try {
-                id = status.getJSONResponse().getJSONObject("user").getInt("id");
-            } catch (JSONException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            }
-
+            id = status.getJSONResponse().getJSONObject("user").getInt("id");
             // user could save itself here ...
 
             return true;

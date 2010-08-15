@@ -1,6 +1,5 @@
 package teamdj.thoughtsquare.utility;
 
-import org.json.JSONObject;
 
 public class AHTTPResponse {
     private int responseStatus;

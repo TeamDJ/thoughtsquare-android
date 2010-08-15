@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import teamdj.thoughtsquare.R;
 import teamdj.thoughtsquare.domain.User;
+import teamdj.thoughtsquare.domain.UserProvider;
 import teamdj.thoughtsquare.utility.AHTTPClient;
 import teamdj.thoughtsquare.utility.Config;
 import teamdj.thoughtsquare.utility.ConfigLoader;
@@ -27,6 +28,7 @@ public class RegisterActivity extends Activity {
         setContentView(R.layout.register);
 
         final Config config = new ConfigLoader().getConfig(this);
+        final UserProvider userProvider = new UserProvider(new AHTTPClient(), config);
 
 
         Button registerButton = (Button) findViewById(R.id.registerButton);
@@ -36,7 +38,7 @@ public class RegisterActivity extends Activity {
                 String displayName = getTextFromTextBox(R.id.displayName);
                 String emailAddress = getTextFromTextBox(R.id.emailAddress);
 
-                final User user = new User(new AHTTPClient(), config, emailAddress, displayName);
+                final User user = userProvider.createUser(displayName, emailAddress);
 
                 if (user.register()) {
                     Bundle extras = new Bundle();
