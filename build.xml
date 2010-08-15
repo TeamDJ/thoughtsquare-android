@@ -63,9 +63,9 @@
          build steps are used.
     -->
     <setup import="false"/>
-    
-    <property name="gen.absolute.dir" location="${gen.dir}" />
+
     <property name="gen.dir" location="gen" />
+    <property name="gen.absolute.dir" location="${gen.dir}" />
     <property name="resource.dir" value="res" />
     <property name="resource.absolute.dir" location="${resource.dir}" />
     <property name="asset.dir" value="assets" />
@@ -74,12 +74,32 @@
     <!-- Directory for the third party java libraries -->
     <property name="external.libs.dir" value="libs" />
     <property name="external.libs.absolute.dir" location="${external.libs.dir}" />
+    <property name="test.libs.dir" location="test-libs" />
+    <property name="test.compile.libs.dir" location="compile-libs" />
 
     <!-- Directory for the native libraries -->
     <property name="native.libs.dir" value="libs" />
     <property name="native.libs.absolute.dir" location="${native.libs.dir}" />
 
+    <!-- Input directories -->
+    <property name="source.dir" value="src" />
+    <property name="source.absolute.dir" location="${source.dir}" />
+    <property name="unit.test.source.dir" location="test" />
+    <property name="gen.dir" value="gen" />
+    <property name="out.dir" value="bin" />
+    <property name="out.absolute.dir" location="${out.dir}" />
+    <property name="out.classes.dir" value="${out.absolute.dir}/classes" />
+    <property name="out.classes.absolute.dir" location="${out.classes.dir}" />
+    <property name="unit.test.out.classes.dir" value="${out.absolute.dir}/unit-test-classes" />
+
     <!-- Output directories -->
+
+    <path id="unit.test.compile.classpath">
+        <pathelement location="${out.classes.absolute.dir}"/>
+        <fileset dir="${external.libs.dir}" includes="*.jar"/>
+        <fileset dir="${test.libs.dir}" includes="*.jar"/>
+        <fileset dir="${test.compile.libs.dir}" includes="*.jar"/>
+    </path>
 
     <!--
         This rules file is meant to be imported by the custom Ant task:
@@ -118,14 +138,7 @@
     <xpath input="AndroidManifest.xml" expression="/manifest/@package"
            output="manifest.package" />
 
-    <!-- Input directories -->
-    <property name="source.dir" value="src" />
-    <property name="source.absolute.dir" location="${source.dir}" />
-    <property name="gen.dir" value="gen" />
-    <property name="out.dir" value="bin" />
-    <property name="out.absolute.dir" location="${out.dir}" />
-    <property name="out.classes.dir" value="${out.absolute.dir}/classes" />
-    <property name="out.classes.absolute.dir" location="${out.classes.dir}" />
+
 
     <!-- Intermediate files -->
     <property name="dex.file.name" value="classes.dex" />
@@ -265,6 +278,7 @@
         <mkdir dir="${gen.absolute.dir}" />
         <mkdir dir="${out.absolute.dir}" />
         <mkdir dir="${out.classes.absolute.dir}" />
+        <mkdir dir="${unit.test.out.classes.dir}" />
     </target>
 
     <!-- Generates the R.java file for this project's resources. -->
@@ -323,6 +337,15 @@
             </classpath>
         </javac>
     </target>
+
+    <target name="compile-unit-tests" depends="compile">
+         <javac target="1.5" destdir="${unit.test.out.classes.dir}">
+            <src path="${unit.test.source.dir}" />
+            <classpath refid="unit.test.compile.classpath"/>
+        </javac>
+    </target>
+
+    
 
     <!-- Converts this project's .class files into .dex files -->
     <target name="-dex" depends="compile">
