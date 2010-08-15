@@ -345,7 +345,29 @@
         </javac>
     </target>
 
-    
+    <target name="run-unit-tests" depends="compile-unit-tests">
+        <mkdir dir="build"/>
+        <mkdir dir="build/rawtestoutput"/>
+        <mkdir dir="build/test-reports"/>
+        <junit printsummary="true" failureproperty="junit.failure">
+            <classpath refid="unit.test.compile.classpath"/>
+            <classpath>
+                <pathelement location="${unit.test.out.classes.dir}"/>
+            </classpath>
+
+            <batchtest todir="build/rawtestoutput">
+                <fileset dir="${unit.test.out.classes.dir}"/>
+                <formatter type="xml"/>
+            </batchtest>
+        </junit>
+        <junitreport todir="build/rawtestoutput">
+            <fileset dir="build/rawtestoutput"/>
+            <report todir="build/test-reports"/>
+        </junitreport>
+        <fail if="junit.failure" message="Unit test(s) failed.  See reports!"/>
+    </target>
+
+
 
     <!-- Converts this project's .class files into .dex files -->
     <target name="-dex" depends="compile">
