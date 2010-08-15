@@ -1,9 +1,10 @@
-package teamdj.thoughtsquare.activity;
+package teamdj.thoughtsquare.test;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.TextView;
 import com.jayway.android.robotium.solo.Solo;
 import teamdj.thoughtsquare.R;
+import teamdj.thoughtsquare.activity.ThoughtSquareActivity;
 
 
 public class ThoughtSquareActivityTest extends ActivityInstrumentationTestCase2<ThoughtSquareActivity> {

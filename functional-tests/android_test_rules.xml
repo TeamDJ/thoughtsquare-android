@@ -68,7 +68,7 @@
        
     </target>
 
-    <target name="run-tests" depends="test-setup, -install-tested-project, install"
+    <target name="run-tests" depends="-install-tested-project, install"
                 description="Runs tests from the package defined in test.package property">
         <run-tests-helper />
     </target>
