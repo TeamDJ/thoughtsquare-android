@@ -27,7 +27,7 @@ public class UserService {
         postParams.put("user[display_name]", displayName);
         postParams.put("user[email]", emailAddress);
 
-        AHTTPResponse status = client.post(config.getServerBaseURL() + "    /users.json", postParams);
+        AHTTPResponse status = client.post(config.getServerBaseURL() + "/users.json", postParams);
 
         User user = null;
         if (status.getResponseStatus() == HttpStatus.SC_CREATED) {
