@@ -1,5 +1,9 @@
 package teamdj.thoughtsquare.service;
 
+import org.apache.http.HttpStatus;
+import org.json.JSONException;
+import teamdj.thoughtsquare.builder.UserBuilder;
+import teamdj.thoughtsquare.domain.User;
 import teamdj.thoughtsquare.utility.AHTTPClient;
 import teamdj.thoughtsquare.utility.AHTTPResponse;
 
@@ -8,19 +12,24 @@ import java.util.Map;
 
 public class UserService {
     private AHTTPClient client;
+    private UserBuilder builder;
 
-    public UserService(AHTTPClient client) {
-        //To change body of created methods use File | Settings | File Templates.
+    public UserService(AHTTPClient client, UserBuilder builder) {
         this.client = client;
+        this.builder = builder;
     }
 
-    public boolean register(String emailAddress, String displayName) {
+    public User register(String emailAddress, String displayName) {
         Map<String, String> postParams = new HashMap<String, String>();
         postParams.put("user[display_name]", displayName);
         postParams.put("user[email]", emailAddress);
 
         AHTTPResponse status = client.post("http://thoughtsquare.heroku.com/users.json", postParams);
 
-        return status.getResponseStatus() == 201;
+        User user = null;
+        if (status.getResponseStatus() == HttpStatus.SC_CREATED) {
+            user = builder.fromJSON(status.getResponseBody());
+        }
+        return user;
     }
 }

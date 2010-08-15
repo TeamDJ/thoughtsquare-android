@@ -1,4 +1,4 @@
-package teamdj.thoughtsquare.test;
+package teamdj.thoughtsquare.activity;
 
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.TextView;

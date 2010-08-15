@@ -5,3 +5,4 @@ build/
 .idea/
 out/
 local.properties
+functional-tests/${gen.dir}/
