@@ -1,12 +1,11 @@
 package teamdj.thoughtsquare.domain;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import teamdj.thoughtsquare.utility.AHTTPClient;
 import teamdj.thoughtsquare.utility.AHTTPResponse;
 import teamdj.thoughtsquare.utility.Config;
+import teamdj.thoughtsquare.utility.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +46,7 @@ public class UserTest {
     }
 
     @Test
-    public void shouldRegisterSuccessfullyWhenUserDoesNotExistOnServer() throws JSONException {
+    public void shouldRegisterSuccessfullyWhenUserDoesNotExistOnServer(){
         when(response.getResponseStatus()).thenReturn(201);
         JSONObject jsonUser = mock(JSONObject.class);
         when(jsonResponse.getJSONObject("user")).thenReturn(jsonUser);
