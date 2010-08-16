@@ -29,11 +29,14 @@ public class UserTest {
     private AHTTPResponse response;
     private User user;
     private static final int NEW_ID = 5;
+    private UserProvider userProvider;
 
     @Before
     public void setup() {
+        userProvider = mock(UserProvider.class);
         client = mock(AHTTPClient.class);
         Config config = mock(Config.class);
+
         response = mock(AHTTPResponse.class);
         jsonResponse = mock(JSONObject.class);
 
@@ -41,8 +44,7 @@ public class UserTest {
         when(client.post(anyString(), anyMap())).thenReturn(response);
         when(response.getJSONResponse()).thenReturn(jsonResponse);
 
-
-        user = new User(client, config, MY_EMAIL, MY_DISPLAY);
+        user = new User(userProvider, client, config, MY_EMAIL, MY_DISPLAY);
     }
 
     @Test
@@ -56,6 +58,7 @@ public class UserTest {
 
         assertThat(user.getId(), equalTo(NEW_ID));
         verify(client).post(REGISTER_URL, verifyPostParams());
+        verify(userProvider).saveUser(user);
     }
 
     @Test
@@ -63,6 +66,8 @@ public class UserTest {
         when(response.getResponseStatus()).thenReturn(422);
 
         assertFalse(user.register());
+        verify(userProvider, never()).saveUser(user);
+
     }
 
     private Map<String, String> verifyPostParams() {

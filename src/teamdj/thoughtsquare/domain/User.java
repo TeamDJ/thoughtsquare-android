@@ -10,12 +10,14 @@ import java.util.Map;
 
 public class User {
     private int id;
+    private UserProvider userProvider;
     private AHTTPClient client;
     private Config config;
     private String email;
     private String displayName;
 
-    public User(AHTTPClient client, Config config, String email, String displayName) {
+    public User(UserProvider userProvider, AHTTPClient client, Config config, String email, String displayName) {
+        this.userProvider = userProvider;
         this.client = client;
         this.config = config;
         this.email = email;
@@ -44,8 +46,7 @@ public class User {
 
         if (status.getResponseStatus() == HttpStatus.SC_CREATED) {
             id = status.getJSONResponse().getJSONObject("user").getInt("id");
-            // user could save itself here ...
-
+            userProvider.saveUser(this);
             return true;
         }
         else{

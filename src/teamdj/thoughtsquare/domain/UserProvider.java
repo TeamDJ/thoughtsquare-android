@@ -14,6 +14,10 @@ public class UserProvider {
     }
 
     public User createUser(String email, String display){
-        return new User(client, config, email, display);
+        return new User(this, client, config, email, display);
+    }
+
+    public void saveUser(User user){
+        
     }
 }
