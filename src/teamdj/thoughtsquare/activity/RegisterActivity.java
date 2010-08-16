@@ -28,7 +28,7 @@ public class RegisterActivity extends Activity {
         setContentView(R.layout.register);
 
         final Config config = new ConfigLoader().getConfig(this);
-        final UserProvider userProvider = new UserProvider(new AHTTPClient(), config);
+        final UserProvider userProvider = new UserProvider(getDefaultSharedPreferences(this), new AHTTPClient(), config);
 
 
         Button registerButton = (Button) findViewById(R.id.registerButton);
@@ -38,15 +38,12 @@ public class RegisterActivity extends Activity {
                 String displayName = getTextFromTextBox(R.id.displayName);
                 String emailAddress = getTextFromTextBox(R.id.emailAddress);
 
-                final User user = userProvider.createUser(displayName, emailAddress);
+                final User user = userProvider.createUser(emailAddress, displayName);
 
                 if (user.register()) {
                     Bundle extras = new Bundle();
                     extras.putString("displayName", displayName);
                     extras.putString("emailAddress", emailAddress);
-
-                    getDefaultSharedPreferences(getContext()).edit().putString(DISPLAY_NAME, displayName).commit();
-                    getDefaultSharedPreferences(getContext()).edit().putString(USERNAME, emailAddress).commit();
 
                     Intent mIntent = new Intent();
                     mIntent.putExtras(extras);

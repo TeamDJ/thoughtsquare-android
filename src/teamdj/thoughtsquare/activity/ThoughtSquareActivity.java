@@ -9,6 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import teamdj.thoughtsquare.R;
+import teamdj.thoughtsquare.domain.UserProvider;
+import teamdj.thoughtsquare.utility.AHTTPClient;
+import teamdj.thoughtsquare.utility.Config;
+import teamdj.thoughtsquare.utility.ConfigLoader;
 
 import static android.preference.PreferenceManager.*;
 import static teamdj.thoughtsquare.Preferences.DEFAULT;
@@ -23,6 +27,9 @@ public class ThoughtSquareActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        final Config config = new ConfigLoader().getConfig(this);
+        final UserProvider userProvider = new UserProvider(getDefaultSharedPreferences(this), new AHTTPClient(), config);
+
         Button updateLocation = (Button) findViewById(R.id.update_location);
         updateLocation.setOnClickListener(new View.OnClickListener() {
 
@@ -32,13 +39,11 @@ public class ThoughtSquareActivity extends Activity {
             }
         });
 
-        String displayName = getDefaultSharedPreferences(this).getString(DISPLAY_NAME, "Stranger");
-        if ("Stranger".equals(displayName)) {
+        if (!userProvider.doesUserExist()) {
             Intent i = new Intent(this, RegisterActivity.class);
             startActivityForResult(i, REGISTER_ACTIVITY);
         } else {
-            //TODO what doest this MODE_WORLD_WRITEABLE mean ? should we be worried?
-            greetUser(displayName);
+            greetUser(userProvider.getUser().getDisplayName());
         }
     }
 

@@ -99,6 +99,7 @@
         <fileset dir="${external.libs.dir}" includes="*.jar"/>
         <fileset dir="${test.libs.dir}" includes="*.jar"/>
         <fileset dir="${test.compile.libs.dir}" includes="*.jar"/>
+        <path refid="android.target.classpath"/>
     </path>
 
     <!--
@@ -349,8 +350,9 @@
         <mkdir dir="build"/>
         <mkdir dir="build/rawtestoutput"/>
         <mkdir dir="build/test-reports"/>
-        <junit printsummary="true" failureproperty="junit.failure">
+        <junit printsummary="true" failureproperty="junit.failure" errorproperty="junit.error">
             <classpath refid="unit.test.compile.classpath"/>
+
             <classpath>
                 <pathelement location="${unit.test.out.classes.dir}"/>
             </classpath>
@@ -365,11 +367,9 @@
             <report todir="build/test-reports"/>
         </junitreport>
         <fail if="junit.failure" message="Unit test(s) failed.  See reports!"/>
+        <fail if="junit.error" message="Unit test(s) had errors.  See reports!"/>
     </target>
 
-    <target name="run-functional-tests">
-
-    </target>
 
     <!-- Converts this project's .class files into .dex files -->
     <target name="-dex" depends="compile">
@@ -492,6 +492,7 @@
     <target name="clean" description="Removes output files created by other targets.">
         <delete dir="${out.absolute.dir}" verbose="${verbose}" />
         <delete dir="${gen.absolute.dir}" verbose="${verbose}" />
+        <delete dir="build" />
     </target>
 
     <!-- Targets for code-coverage measurement purposes, invoked from external file -->
