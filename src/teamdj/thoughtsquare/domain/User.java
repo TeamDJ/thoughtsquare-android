@@ -1,15 +1,23 @@
 package teamdj.thoughtsquare.domain;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.apache.http.HttpStatus;
+import teamdj.thoughtsquare.utility.AHTTPClient;
+import teamdj.thoughtsquare.utility.AHTTPResponse;
+import teamdj.thoughtsquare.utility.Config;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class User {
     private int id;
+    private AHTTPClient client;
+    private Config config;
     private String email;
     private String displayName;
 
-    public User(int id, String email, String displayName) {
-        this.id = id;
+    public User(AHTTPClient client, Config config, String email, String displayName) {
+        this.client = client;
+        this.config = config;
         this.email = email;
         this.displayName = displayName;
     }
@@ -24,5 +32,28 @@ public class User {
 
     public String getDisplayName() {
         return displayName;
+    }
+
+
+    public boolean register() {
+        Map<String, String> postParams = new HashMap<String, String>();
+        postParams.put("user[display_name]", displayName);
+        postParams.put("user[email]", email);
+
+        AHTTPResponse status = client.post(config.getServerBaseURL() + "/users.json", postParams);
+
+        if (status.getResponseStatus() == HttpStatus.SC_CREATED) {
+            id = status.getJSONResponse().getJSONObject("user").getInt("id");
+            // user could save itself here ...
+
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public void updateLocation(){
+        // call client to update location here.
     }
 }

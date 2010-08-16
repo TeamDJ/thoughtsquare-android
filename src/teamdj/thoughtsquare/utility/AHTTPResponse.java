@@ -1,5 +1,6 @@
 package teamdj.thoughtsquare.utility;
 
+
 public class AHTTPResponse {
     private int responseStatus;
     private String responseBody;
@@ -15,5 +16,9 @@ public class AHTTPResponse {
 
     public String getResponseBody() {
         return responseBody;
+    }
+
+    public JSONObject getJSONResponse() {
+        return new JSONObject(responseBody);
     }
 }
