@@ -58,16 +58,6 @@
         </subant>
     </target>
 
-     <target name="-uninstall-tested-project">
-        <subant target="uninstall">
-            <fileset dir="${tested.project.absolute.dir}" includes="build.xml" />
-        </subant>
-    </target>
-
-    <target name="test-setup" depends="-uninstall-tested-project">
-       
-    </target>
-
     <target name="run-tests" depends="-install-tested-project, install"
                 description="Runs tests from the package defined in test.package property">
         <run-tests-helper />

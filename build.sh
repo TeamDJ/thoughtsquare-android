@@ -5,7 +5,7 @@ ruby fake-server.rb &
 trap "cleanup" 0 2 9 15
 
 cp env/local/application.properties assets/application.properties
-ant clean uninstall 
+ant clean uninstall run-unit-tests 
 # do the following in a subshell so this script stays in root dir
 (cd functional-tests; ant clean run-tests)
 
