@@ -15,7 +15,7 @@
       <sourceFolder url="file://$MODULE_DIR$/gen" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="1.6" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module-library">
       <library>
@@ -26,7 +26,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module" module-name="Thoughtsquare-android" />
     <orderEntry type="library" scope="PROVIDED" name="Android 2.2 Platform" level="application" />
     <orderEntry type="module" module-name="thoughtsquare-android" />
   </component>

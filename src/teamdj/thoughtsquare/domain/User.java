@@ -28,6 +28,15 @@ public class User {
         this.displayName = displayName;
     }
 
+    public User(UserProvider userProvider, AHTTPClient client, Config config, int id, String email, String displayName) {
+        this.userProvider = userProvider;
+        this.client = client;
+        this.config = config;
+        this.id = id;
+        this.email = email;
+        this.displayName = displayName;
+    }
+
     public int getId() {
         return id;
     }
@@ -58,7 +67,6 @@ public class User {
         }
 
         return false;
-
     }
 
     public boolean updateLocation(Location newLocation) {

@@ -63,8 +63,8 @@ public class ThoughtSquareActivity extends Activity {
                 break;
             case UPDATE_LOCATION_ACTIVITY:
                 TextView currentLocation = (TextView)findViewById(R.id.current_location);
-                currentLocation.setText(extras.getString("locationTitle"));
-                Location location = new Location(extras.getInt("locationId"), "", 0, 0);
+                Location location = extras.getParcelable("location");
+                currentLocation.setText(location.getTitle());
                 userProvider.getUser().updateLocation(location);
                 break;
         }

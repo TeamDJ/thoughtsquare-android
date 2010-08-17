@@ -46,8 +46,7 @@ public class UpdateLocationActivity extends ListActivity {
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Bundle extras = new Bundle();
-        extras.putString("locationTitle", locations.get(position).getTitle());
-        extras.putInt("locationId", locations.get(position).getId());
+        extras.putParcelable("location", locations.get(position));
 
         Intent mIntent = new Intent();
         mIntent.putExtras(extras);
