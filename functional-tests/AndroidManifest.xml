@@ -7,7 +7,7 @@
     <!-- We add an application tag here just so that we can indicate that
          this package needs to link against the android.test library,
          which is needed when building test cases. -->
-    <application android:label="functional-tests">
+    <application android:label="ThoughtSquare Tests">
         <uses-library android:name="android.test.runner" />
     </application>
     <!--
@@ -17,5 +17,5 @@
     -->
     <instrumentation android:name="android.test.InstrumentationTestRunner"
                      android:targetPackage="com.thoughtsquare"
-                     android:label="Tests for com.thoughtsquare"/>
+                     android:label="Tests for ThoughtSquare"/>
 </manifest>
