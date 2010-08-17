@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import teamdj.thoughtsquare.R;
+import teamdj.thoughtsquare.domain.Location;
 import teamdj.thoughtsquare.domain.UserProvider;
 import teamdj.thoughtsquare.utility.AHTTPClient;
 import teamdj.thoughtsquare.utility.Config;
@@ -21,6 +22,7 @@ import static teamdj.thoughtsquare.Preferences.DISPLAY_NAME;
 public class ThoughtSquareActivity extends Activity {
     private static final int REGISTER_ACTIVITY = 0;
     private static final int UPDATE_LOCATION_ACTIVITY = 1;
+    private UserProvider userProvider;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,7 +30,7 @@ public class ThoughtSquareActivity extends Activity {
         setContentView(R.layout.main);
 
         final Config config = new ConfigLoader().getConfig(this);
-        final UserProvider userProvider = new UserProvider(getDefaultSharedPreferences(this), new AHTTPClient(), config);
+        userProvider = new UserProvider(getDefaultSharedPreferences(this), new AHTTPClient(), config);
 
         Button updateLocation = (Button) findViewById(R.id.update_location);
         updateLocation.setOnClickListener(new View.OnClickListener() {
@@ -62,6 +64,8 @@ public class ThoughtSquareActivity extends Activity {
             case UPDATE_LOCATION_ACTIVITY:
                 TextView currentLocation = (TextView)findViewById(R.id.current_location);
                 currentLocation.setText(extras.getString("locationTitle"));
+                Location location = new Location(extras.getInt("locationId"), "", 0, 0);
+                userProvider.getUser().updateLocation(location);
                 break;
         }
     }
