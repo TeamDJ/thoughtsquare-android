@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -12,12 +11,9 @@ import com.thoughtsquare.R;
 import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.domain.UserProvider;
 import com.thoughtsquare.utility.AHTTPClient;
-import com.thoughtsquare.utility.Config;
 import com.thoughtsquare.utility.ConfigLoader;
 
 import static android.preference.PreferenceManager.*;
-import static com.thoughtsquare.Preferences.DEFAULT;
-import static com.thoughtsquare.Preferences.DISPLAY_NAME;
 
 public class ThoughtSquareActivity extends Activity {
     private static final int REGISTER_ACTIVITY = 0;
@@ -28,29 +24,15 @@ public class ThoughtSquareActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        userProvider = new UserProvider(getDefaultSharedPreferences(this), new AHTTPClient(), new ConfigLoader().getConfig(this));
 
-        final Config config = new ConfigLoader().getConfig(this);
-        userProvider = new UserProvider(getDefaultSharedPreferences(this), new AHTTPClient(), config);
+        setupUpdateLocationButton();
 
-        Button updateLocation = (Button) findViewById(R.id.update_location);
-        updateLocation.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
-                Intent i = new Intent(getContext(), UpdateLocationActivity.class);
-                startActivityForResult(i, UPDATE_LOCATION_ACTIVITY);
-            }
-        });
-
-        if (!userProvider.doesUserExist()) {
-            Intent i = new Intent(this, RegisterActivity.class);
-            startActivityForResult(i, REGISTER_ACTIVITY);
-        } else {
+        if (userProvider.userExists()) {
             greetUser(userProvider.getUser().getDisplayName());
+        } else {
+            startRegisterActivity();
         }
-    }
-
-    private Context getContext() {
-        return this;
     }
 
     @Override
@@ -68,6 +50,27 @@ public class ThoughtSquareActivity extends Activity {
                 userProvider.getUser().updateLocation(location);
                 break;
         }
+    }
+
+
+    private Context getContext() {
+        return this;
+    }
+
+    private void startRegisterActivity() {
+        Intent i = new Intent(this, RegisterActivity.class);
+        startActivityForResult(i, REGISTER_ACTIVITY);
+    }
+
+    private void setupUpdateLocationButton() {
+        Button updateLocation = (Button) findViewById(R.id.update_location);
+        updateLocation.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                Intent i = new Intent(getContext(), UpdateLocationActivity.class);
+                startActivityForResult(i, UPDATE_LOCATION_ACTIVITY);
+            }
+        });
     }
 
     private void greetUser(String displayName) {

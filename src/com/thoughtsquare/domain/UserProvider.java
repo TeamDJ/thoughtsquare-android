@@ -47,7 +47,7 @@ public class UserProvider {
         return createUser(userId, email, displayName);
     }
 
-    public boolean doesUserExist() {
+    public boolean userExists() {
         return preferences.getInt(USER_ID, 0) != 0;
     }
 }
