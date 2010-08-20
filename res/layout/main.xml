@@ -4,26 +4,46 @@
               android:layout_width="fill_parent"
               android:layout_height="fill_parent"
         >
+
     <TextView
             android:id="@+id/welcome_label"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Hello World, ThoughtSquareActivity"
             />
-    <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Your current location is:"
-            />
-    <TextView
-            android:id="@+id/current_location"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Unknown"
-            />
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+            >
+
+        <TextView
+                android:id="@+id/current_location_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:text="Your current location is:"
+                android:singleLine="true"
+                />
+
+        <TextView
+                android:id="@+id/current_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/current_location_label"
+                android:text="Unknown"
+                android:singleLine="true"
+                android:paddingLeft="5dip"
+                />
+
+    </RelativeLayout>
+
     <Button android:id="@+id/update_location"
             android:text="@string/update_location"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            />
+
 </LinearLayout>
 
