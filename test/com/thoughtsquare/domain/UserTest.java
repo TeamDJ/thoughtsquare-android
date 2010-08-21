@@ -53,7 +53,7 @@ public class UserTest {
         when(client.put(anyString(), anyMap())).thenReturn(response);
         when(response.getJSONResponse()).thenReturn(jsonResponse);
 
-        user = new User(userProvider, client, config, null, MY_EMAIL, MY_DISPLAY);
+        user = new User(userProvider, client, config, null, MY_EMAIL, MY_DISPLAY, null);
     }
 
     @Test

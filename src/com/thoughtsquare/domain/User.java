@@ -21,13 +21,15 @@ public class User {
     private Location currentLocation;
 
 
-    public User(UserProvider userProvider, AHTTPClient client, Config config, Integer id, String email, String displayName) {
+    public User(UserProvider userProvider, AHTTPClient client, Config config,
+                Integer id, String email, String displayName, Location currentLocation) {
         this.userProvider = userProvider;
         this.client = client;
         this.config = config;
         this.email = email;
         this.displayName = displayName;
         this.id = id;
+        this.currentLocation = currentLocation;
     }
 
     public Integer getId() {
@@ -79,4 +81,7 @@ public class User {
     }
 
 
+    public boolean currentLocationIsKnown() {
+        return currentLocation != null;
+    }
 }
