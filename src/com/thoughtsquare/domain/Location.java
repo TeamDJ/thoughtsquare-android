@@ -6,10 +6,10 @@ import android.os.Parcelable;
 public class Location implements Parcelable {
     private int id;
     private String title;
-    private float latitude;
-    private float longitude;
+    private double latitude;
+    private double longitude;
 
-    public Location(int id, String title, float latitude, float longitude) {
+    public Location(int id, String title, double latitude, double longitude) {
         this.id = id;
         this.title = title;
         this.latitude = latitude;
@@ -17,7 +17,7 @@ public class Location implements Parcelable {
     }
 
     public Location(Parcel parcel) {
-        this(parcel.readInt(), parcel.readString(), parcel.readFloat(), parcel.readFloat());
+        this(parcel.readInt(), parcel.readString(), parcel.readDouble(), parcel.readDouble());
     }
 
     public int getId() {
@@ -28,19 +28,19 @@ public class Location implements Parcelable {
         return title;
     }
 
-    public float getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public float getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(id);
         parcel.writeString(title);
-        parcel.writeFloat(latitude);
-        parcel.writeFloat(longitude);
+        parcel.writeDouble(latitude);
+        parcel.writeDouble(longitude);
     }
 
     public static final Parcelable.Creator<Location> CREATOR = new Parcelable.Creator<Location>() {

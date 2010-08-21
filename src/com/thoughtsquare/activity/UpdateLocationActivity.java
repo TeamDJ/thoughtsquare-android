@@ -15,13 +15,6 @@ import com.thoughtsquare.service.LocationService;
 
 import java.util.List;
 
-/**
- * Created by IntelliJ IDEA.
- * User: jottaway
- * Date: Aug 11, 2010
- * Time: 4:27:12 PM
- * To change this template use File | Settings | File Templates.
- */
 public class UpdateLocationActivity extends ListActivity {
     private LocationService locationService;
     private List<Location> locations;
@@ -34,7 +27,7 @@ public class UpdateLocationActivity extends ListActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);    //To change body of overridden methods use File | Settings | File Templates.
+        super.onCreate(savedInstanceState);    
         setContentView(R.layout.update_location);
 
         setListAdapter(new LocationAdapter());

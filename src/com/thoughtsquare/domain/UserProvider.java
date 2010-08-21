@@ -37,11 +37,12 @@ public class UserProvider {
 
         if (user.currentLocationIsKnown()){
              Location location = user.getCurrentLocation();
+            //TODO problem - preferences don't allow storing double!
              preferences.edit()
                 .putInt(USER_LOCATION_ID, location.getId())
                 .putString(USER_LOCATION_TITLE, location.getTitle())
-                .putFloat(USER_LOCATION_LATITUDE, location.getLatitude())
-                .putFloat(USER_LOCATION_LONGITUDE, location.getLongitude())
+                .putString(USER_LOCATION_LATITUDE, String.valueOf(location.getLatitude()))
+                .putString(USER_LOCATION_LONGITUDE, String.valueOf(location.getLongitude()))
                 .commit();
         }
     }
@@ -55,8 +56,8 @@ public class UserProvider {
         Location currentLocation = new Location(
             preferences.getInt(USER_LOCATION_ID, -1),
             preferences.getString(USER_LOCATION_TITLE, ""),
-            preferences.getFloat(USER_LOCATION_LATITUDE, 0.0F),
-            preferences.getFloat(USER_LOCATION_LONGITUDE, 0.0F)
+            Double.parseDouble(preferences.getString(USER_LOCATION_LATITUDE, "0.0")),
+            Double.parseDouble(preferences.getString(USER_LOCATION_LONGITUDE, "0.0"))
         );
 
         return new User(this, client, config, userId,
