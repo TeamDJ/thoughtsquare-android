@@ -5,7 +5,7 @@ import com.thoughtsquare.domain.Location;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LocationService {
+public class LocationProvider {
         public List<Location> getLocations() {
         List<Location> locations = new ArrayList<Location>();
 

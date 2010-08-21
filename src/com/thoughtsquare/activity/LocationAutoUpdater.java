@@ -4,20 +4,20 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import com.thoughtsquare.domain.User;
-import com.thoughtsquare.service.LocationService;
+import com.thoughtsquare.service.LocationProvider;
 
 public class LocationAutoUpdater implements LocationListener{
     private User user;
-    private LocationService locationService;
+    private LocationProvider locationProvider;
 
 
-    public LocationAutoUpdater(User user, LocationService locationService) {
+    public LocationAutoUpdater(User user, LocationProvider locationProvider) {
         this.user = user;
-        this.locationService = locationService;
+        this.locationProvider = locationProvider;
     }
 
     public void onLocationChanged(Location location) {
-        com.thoughtsquare.domain.Location resolvedLocation = locationService.getNearestLocation(location);
+        com.thoughtsquare.domain.Location resolvedLocation = locationProvider.getNearestLocation(location);
         if(resolvedLocation != null){
             user.updateLocation(resolvedLocation);
         }

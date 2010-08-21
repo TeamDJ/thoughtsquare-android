@@ -2,7 +2,7 @@ package com.thoughtsquare.activity;
 
 import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.domain.User;
-import com.thoughtsquare.service.LocationService;
+import com.thoughtsquare.service.LocationProvider;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,21 +11,21 @@ import static org.mockito.Mockito.*;
 
 public class LocationAutoUpdaterTest{
     private User user;
-    private LocationService locationService;
+    private LocationProvider locationProvider;
     private LocationAutoUpdater locationAutoUpdater;
 
     @Before
     public void setup() {
         user = mock(User.class);
-        locationService = mock(LocationService.class);
-        locationAutoUpdater = new LocationAutoUpdater(user, locationService);
+        locationProvider = mock(LocationProvider.class);
+        locationAutoUpdater = new LocationAutoUpdater(user, locationProvider);
     }
 
     @Test
     public void shouldUpdateUsersLocationWhenLocationIsFound() {
         android.location.Location location = mock(android.location.Location.class);
         Location foundLocation = mock(Location.class);
-        when(locationService.getNearestLocation(location)).thenReturn(foundLocation);
+        when(locationProvider.getNearestLocation(location)).thenReturn(foundLocation);
 
         locationAutoUpdater.onLocationChanged(location);
 
@@ -35,7 +35,7 @@ public class LocationAutoUpdaterTest{
     @Test
     public void shouldNotUpdateUsersLocationWhenLocationIsNotKnown() {
         android.location.Location location = mock(android.location.Location.class);
-        when(locationService.getNearestLocation(location)).thenReturn(null);
+        when(locationProvider.getNearestLocation(location)).thenReturn(null);
 
         locationAutoUpdater.onLocationChanged(location);
 

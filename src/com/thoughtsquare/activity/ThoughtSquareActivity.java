@@ -13,7 +13,7 @@ import com.thoughtsquare.R;
 import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.domain.User;
 import com.thoughtsquare.domain.UserProvider;
-import com.thoughtsquare.service.LocationService;
+import com.thoughtsquare.service.LocationProvider;
 import com.thoughtsquare.utility.AHTTPClient;
 import com.thoughtsquare.utility.ConfigLoader;
 
@@ -23,14 +23,14 @@ public class ThoughtSquareActivity extends Activity {
     private static final int REGISTER_ACTIVITY = 0;
     private static final int UPDATE_LOCATION_ACTIVITY = 1;
     private UserProvider userProvider;
-    private LocationService locationService;
+    private LocationProvider locationProvider;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         userProvider = new UserProvider(getDefaultSharedPreferences(this), new AHTTPClient(), new ConfigLoader().getConfig(this));
-        locationService = new LocationService();
+        locationProvider = new LocationProvider();
 
         setupUpdateLocationButton();
 
@@ -75,7 +75,7 @@ public class ThoughtSquareActivity extends Activity {
 
         //TODO what provider should we be using and how long should we be polling - config?
         String bestProvider = locationManager.getBestProvider(new Criteria(), true);
-        locationManager.requestLocationUpdates(bestProvider, 0, 0, new LocationAutoUpdater(userProvider.getUser(), locationService));
+        locationManager.requestLocationUpdates(bestProvider, 0, 0, new LocationAutoUpdater(userProvider.getUser(), locationProvider));
 
     }
 
