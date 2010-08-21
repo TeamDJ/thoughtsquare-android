@@ -20,12 +20,9 @@ public class UserProvider {
     }
 
     public User createUser(String email, String display) {
-        return new User(this, client, config, email, display);
+        return new User(this, client, config, null, email, display);
     }
 
-    public User createUser(int id, String email, String display) {
-        return new User(this, client, config, id, email, display);
-    }
 
     public void saveUser(User user) {
         preferences.edit()
@@ -44,7 +41,7 @@ public class UserProvider {
         String displayName = preferences.getString(USER_DISPLAY_NAME, "");
         String email = preferences.getString(USER_EMAIL, "");
 
-        return createUser(userId, email, displayName);
+        return new User(this, client, config, userId, email, displayName);
     }
 
     public boolean userExists() {

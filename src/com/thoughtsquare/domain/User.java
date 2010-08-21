@@ -12,7 +12,7 @@ import static java.lang.String.valueOf;
 import static org.apache.http.HttpStatus.SC_OK;
 
 public class User {
-    private int id;
+    private Integer id;
     private UserProvider userProvider;
     private AHTTPClient client;
     private Config config;
@@ -20,24 +20,17 @@ public class User {
     private String displayName;
     private Location currentLocation;
 
-    public User(UserProvider userProvider, AHTTPClient client, Config config, String email, String displayName) {
+
+    public User(UserProvider userProvider, AHTTPClient client, Config config, Integer id, String email, String displayName) {
         this.userProvider = userProvider;
         this.client = client;
         this.config = config;
         this.email = email;
         this.displayName = displayName;
-    }
-
-    public User(UserProvider userProvider, AHTTPClient client, Config config, int id, String email, String displayName) {
-        this.userProvider = userProvider;
-        this.client = client;
-        this.config = config;
         this.id = id;
-        this.email = email;
-        this.displayName = displayName;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -84,4 +77,6 @@ public class User {
 
         return false;
     }
+
+
 }

@@ -3,8 +3,8 @@
 # kill fake-server on interrupts or when process exits
 trap "cleanup" 0 2 9 15
 cleanup(){
-    kill -9 $(jobs -p)
     cp env/production/application.properties assets/application.properties
+    kill -9 0
 }
 
 ruby fake-server.rb &
