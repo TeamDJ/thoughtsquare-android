@@ -31,7 +31,7 @@ public class UserProviderTest extends InstrumentationTestCase {
         assertEquals("Brisbane", savedLocation.getTitle());
         assertEquals(32.5677878, savedLocation.getLatitude());
         assertEquals(-122.454643, savedLocation.getLongitude());
-        assertEquals(100.0, savedLocation.getRadius());
+        assertEquals(100.0F, savedLocation.getRadius());
 
     }
 

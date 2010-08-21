@@ -11,18 +11,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 import com.thoughtsquare.R;
 import com.thoughtsquare.domain.Location;
-import com.thoughtsquare.service.LocationProvider;
+import com.thoughtsquare.service.LocationsProvider;
 
 import java.util.List;
 
 public class UpdateLocationActivity extends ListActivity {
-    private LocationProvider locationProvider;
+    private LocationsProvider locationsProvider;
     private List<Location> locations;
 
     public UpdateLocationActivity() {
-        locationProvider = new LocationProvider();
+        locationsProvider = new LocationsProvider();
         
-        locations = locationProvider.getLocations();
+        locations = locationsProvider.getLocations();
     }
 
     @Override

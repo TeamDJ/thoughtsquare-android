@@ -65,8 +65,10 @@ public class Location implements Parcelable {
         return 0;
     }
 
-//    public android.location.Location toAndroidLocation() {
-//        android.location.Location loc = new android.location.Location("");
-//
-//    }
+    public boolean contains(android.location.Location otherLocation) {
+        android.location.Location thisLocation = new android.location.Location("");
+        thisLocation.setLatitude(latitude);
+        thisLocation.setLongitude(longitude);
+        return otherLocation.distanceTo(thisLocation) <= radius;
+    }
 }
