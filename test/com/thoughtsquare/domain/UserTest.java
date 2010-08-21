@@ -38,12 +38,13 @@ public class UserTest {
     private User user;
     private UserProvider userProvider;
     private static final int NEW_LOCATION_ID = 1;
+    private Config config;
 
     @Before
     public void setup() {
         userProvider = mock(UserProvider.class);
         client = mock(AHTTPClient.class);
-        Config config = mock(Config.class);
+        config = mock(Config.class);
 
         response = mock(AHTTPResponse.class);
         jsonResponse = mock(JSONObject.class);
@@ -80,7 +81,7 @@ public class UserTest {
 
     @Test
     public void shouldUpdateLocationSuccessfully() {
-        registerUser();
+        User user = new User(userProvider, client, config, 5, MY_EMAIL, MY_DISPLAY, null);
 
         Location newLocation = mock(Location.class);
 
@@ -93,6 +94,7 @@ public class UserTest {
         assertThat(user.getCurrentLocation(), equalTo(newLocation));
 
         verify(client).put(EDIT_USER_URL, verifyUpdateLocationParams());
+        verify(userProvider).saveUser(user);
     }
 
     private Map<String, String> verifyRegisterPostParams() {
@@ -110,12 +112,4 @@ public class UserTest {
         return postParams;
     }
 
-    private void registerUser() {
-        JSONObject jsonUser = mock(JSONObject.class);
-        when(response.getResponseStatus()).thenReturn(SC_CREATED);
-        when(jsonResponse.getJSONObject("user")).thenReturn(jsonUser);
-        when(jsonUser.getInt("id")).thenReturn(NEW_ID);
-
-        assertTrue(user.register());
-    }
 }

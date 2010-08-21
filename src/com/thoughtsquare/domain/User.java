@@ -74,6 +74,7 @@ public class User {
 
         if (status.getResponseStatus() == SC_OK) {
             this.currentLocation = newLocation;
+            userProvider.saveUser(this);
             return true;
         }
 
