@@ -3,6 +3,8 @@ package com.thoughtsquare.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Criteria;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +13,8 @@ import com.thoughtsquare.R;
 import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.domain.User;
 import com.thoughtsquare.domain.UserProvider;
+import com.thoughtsquare.service.LocationService;
+import com.thoughtsquare.service.MockLocationService;
 import com.thoughtsquare.utility.AHTTPClient;
 import com.thoughtsquare.utility.ConfigLoader;
 
@@ -20,12 +24,14 @@ public class ThoughtSquareActivity extends Activity {
     private static final int REGISTER_ACTIVITY = 0;
     private static final int UPDATE_LOCATION_ACTIVITY = 1;
     private UserProvider userProvider;
+    private LocationService locationService;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         userProvider = new UserProvider(getDefaultSharedPreferences(this), new AHTTPClient(), new ConfigLoader().getConfig(this));
+        locationService = new MockLocationService();
 
         setupUpdateLocationButton();
 
@@ -38,7 +44,12 @@ public class ThoughtSquareActivity extends Activity {
         } else {
             startRegisterActivity();
         }
+
+        setupAutLocationUpdater();
     }
+
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -60,6 +71,14 @@ public class ThoughtSquareActivity extends Activity {
         return this;
     }
 
+    private void setupAutLocationUpdater() {
+        LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+
+        //TODO what provider should we be using and how long should we be polling - config?
+        String bestProvider = locationManager.getBestProvider(new Criteria(), true);
+        locationManager.requestLocationUpdates(bestProvider, 0, 0, new LocationAutoUpdater(userProvider.getUser(), locationService));
+
+    }
 
     private void startRegisterActivity() {
         Intent i = new Intent(this, RegisterActivity.class);

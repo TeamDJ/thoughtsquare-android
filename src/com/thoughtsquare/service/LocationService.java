@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface LocationService {
     List<Location> getLocations();
+
+    Location findCurrentLocation(android.location.Location location);
 }

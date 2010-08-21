@@ -16,4 +16,8 @@ public class MockLocationService implements LocationService {
 
         return locations;
     }
+
+    public Location findCurrentLocation(android.location.Location location) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }
