@@ -17,7 +17,7 @@ public class LocationAutoUpdater implements LocationListener{
     }
 
     public void onLocationChanged(Location location) {
-        com.thoughtsquare.domain.Location resolvedLocation = locationService.findCurrentLocation(location);
+        com.thoughtsquare.domain.Location resolvedLocation = locationService.getNearestLocation(location);
         if(resolvedLocation != null){
             user.updateLocation(resolvedLocation);
         }

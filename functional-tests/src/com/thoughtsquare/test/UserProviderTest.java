@@ -14,7 +14,7 @@ public class UserProviderTest extends InstrumentationTestCase {
         Context context = getInstrumentation().getContext();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         UserProvider userProvider = new UserProvider(sharedPreferences, null, null);
-        Location location = new Location(2, "Brisbane", 32.5677878, -122.454643);
+        Location location = new Location(2, "Brisbane", 32.5677878, -122.454643, 100);
 
 
         User user = new User(userProvider, null, null, 5, "foo@bla.com", "bar", location);
@@ -31,6 +31,7 @@ public class UserProviderTest extends InstrumentationTestCase {
         assertEquals("Brisbane", savedLocation.getTitle());
         assertEquals(32.5677878, savedLocation.getLatitude());
         assertEquals(-122.454643, savedLocation.getLongitude());
+        assertEquals(100.0, savedLocation.getRadius());
 
     }
 
