@@ -12,11 +12,8 @@ import android.widget.TextView;
 import com.thoughtsquare.R;
 import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.service.LocationService;
-import com.thoughtsquare.service.MockLocationService;
 
 import java.util.List;
-
-import static java.util.Arrays.asList;
 
 /**
  * Created by IntelliJ IDEA.
@@ -30,7 +27,7 @@ public class UpdateLocationActivity extends ListActivity {
     private List<Location> locations;
 
     public UpdateLocationActivity() {
-        locationService = new MockLocationService();
+        locationService = new LocationService();
         
         locations = locationService.getLocations();
     }

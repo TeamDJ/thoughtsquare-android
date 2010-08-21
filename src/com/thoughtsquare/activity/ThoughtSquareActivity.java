@@ -14,7 +14,6 @@ import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.domain.User;
 import com.thoughtsquare.domain.UserProvider;
 import com.thoughtsquare.service.LocationService;
-import com.thoughtsquare.service.MockLocationService;
 import com.thoughtsquare.utility.AHTTPClient;
 import com.thoughtsquare.utility.ConfigLoader;
 
@@ -31,7 +30,7 @@ public class ThoughtSquareActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         userProvider = new UserProvider(getDefaultSharedPreferences(this), new AHTTPClient(), new ConfigLoader().getConfig(this));
-        locationService = new MockLocationService();
+        locationService = new LocationService();
 
         setupUpdateLocationButton();
 
