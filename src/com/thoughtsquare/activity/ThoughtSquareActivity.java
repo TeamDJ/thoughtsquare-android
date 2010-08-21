@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.thoughtsquare.R;
 import com.thoughtsquare.domain.Location;
+import com.thoughtsquare.domain.User;
 import com.thoughtsquare.domain.UserProvider;
 import com.thoughtsquare.utility.AHTTPClient;
 import com.thoughtsquare.utility.ConfigLoader;
@@ -29,7 +30,11 @@ public class ThoughtSquareActivity extends Activity {
         setupUpdateLocationButton();
 
         if (userProvider.userExists()) {
-            greetUser(userProvider.getUser().getDisplayName());
+            User user = userProvider.getUser();
+            greetUser(user.getDisplayName());
+            if(user.currentLocationIsKnown()){
+                showLocation(user.getCurrentLocation());
+            }
         } else {
             startRegisterActivity();
         }
@@ -44,18 +49,17 @@ public class ThoughtSquareActivity extends Activity {
                 greetUser(extras.getString("displayName"));
                 break;
             case UPDATE_LOCATION_ACTIVITY:
-                TextView currentLocation = (TextView)findViewById(R.id.current_location);
                 Location location = extras.getParcelable("location");
-                currentLocation.setText(location.getTitle());
+                showLocation(location);
                 userProvider.getUser().updateLocation(location);
                 break;
         }
     }
 
-
     private Context getContext() {
         return this;
     }
+
 
     private void startRegisterActivity() {
         Intent i = new Intent(this, RegisterActivity.class);
@@ -77,6 +81,11 @@ public class ThoughtSquareActivity extends Activity {
 
         TextView textView = (TextView) findViewById(R.id.welcome_label);
         textView.setText("Hello " + displayName);
+    }
+
+    private void showLocation(Location location) {
+        TextView currentLocation = (TextView)findViewById(R.id.current_location);
+        currentLocation.setText(location.getTitle());
     }
 
 
