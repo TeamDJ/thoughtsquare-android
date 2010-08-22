@@ -1,7 +1,6 @@
 package com.thoughtsquare.activity;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -15,7 +14,6 @@ import com.thoughtsquare.R;
 import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.domain.User;
 import com.thoughtsquare.domain.UserProvider;
-import com.thoughtsquare.intent.IntentActions;
 import com.thoughtsquare.intent.LocationUpdateReceiver;
 import com.thoughtsquare.intent.OnLocationUpdate;
 import com.thoughtsquare.service.LocationsProvider;
@@ -51,7 +49,7 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate{
             startRegisterActivity();
         }
 
-        setupAutLocationUpdater();
+        setupAutoLocationUpdater();
     }
 
 
@@ -77,7 +75,7 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate{
         return this;
     }
 
-    private void setupAutLocationUpdater() {
+    private void setupAutoLocationUpdater() {
         LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
         //TODO what provider should we be using and how long should we be polling - config?

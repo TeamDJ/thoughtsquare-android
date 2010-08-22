@@ -72,9 +72,9 @@ public class User {
 
         AHTTPResponse status = client.put(config.getServerBaseURL() + "/users/" + id + ".json", putParams);
 
+        this.currentLocation = newLocation;
+        userProvider.saveUser(this);
         if (status.getResponseStatus() == SC_OK) {
-            this.currentLocation = newLocation;
-            userProvider.saveUser(this);
             return true;
         }
 

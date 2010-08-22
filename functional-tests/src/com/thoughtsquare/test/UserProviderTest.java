@@ -26,7 +26,7 @@ public class UserProviderTest extends InstrumentationTestCase {
         assertEquals("bar", savedUser.getDisplayName());
         assertEquals(5, savedUser.getId().intValue());
 
-        Location savedLocation = user.getCurrentLocation();
+        Location savedLocation = savedUser.getCurrentLocation();
         assertEquals(2, savedLocation.getId());
         assertEquals("Brisbane", savedLocation.getTitle());
         assertEquals(32.5677878, savedLocation.getLatitude());

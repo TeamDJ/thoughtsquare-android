@@ -27,8 +27,6 @@ public class ThoughtSquareActivityTest extends ActivityInstrumentationTestCase2<
 
     // only works for a newly installed app that doesnt have user details saved
     public void testEverythingThatMatters() {
-        solo.waitForText("TW Email");
-
         solo.enterText(0, "Julian Oliver");
         solo.enterText(1, "joliver@thoughtworks.com");
         solo.clickOnButton("Register");

@@ -8,14 +8,10 @@ import com.thoughtsquare.domain.User;
 import com.thoughtsquare.intent.IntentActions;
 import com.thoughtsquare.service.LocationsProvider;
 import com.thoughtsquare.utility.IntentBuilder;
-import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 

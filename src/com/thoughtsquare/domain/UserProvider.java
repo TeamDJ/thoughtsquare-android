@@ -50,20 +50,23 @@ public class UserProvider {
     }
 
     public User getUser() {
-        int userId = preferences.getInt(USER_ID, -1);
-        if (userId == -1) {
+        if (!userExists()) {
             return null;
         }
 
-        Location currentLocation = new Location(
-            preferences.getInt(USER_LOCATION_ID, -1),
-            preferences.getString(USER_LOCATION_TITLE, ""),
-            Double.parseDouble(preferences.getString(USER_LOCATION_LATITUDE, "0.0")),
-            Double.parseDouble(preferences.getString(USER_LOCATION_LONGITUDE, "0.0")),
-            preferences.getFloat(USER_LOCATION_RADIUS, 0)
-        );
+        int currentLocationId = preferences.getInt(USER_LOCATION_ID, -1);
+        Location currentLocation = null;
+        if(currentLocationId != -1){
+            currentLocation = new Location(
+                    currentLocationId,
+                    preferences.getString(USER_LOCATION_TITLE, ""),
+                    Double.parseDouble(preferences.getString(USER_LOCATION_LATITUDE, "0.0")),
+                    Double.parseDouble(preferences.getString(USER_LOCATION_LONGITUDE, "0.0")),
+                    preferences.getFloat(USER_LOCATION_RADIUS, 0)
+            );
+        }
 
-        return new User(this, client, config, userId,
+        return new User(this, client, config, preferences.getInt(USER_ID, -1),
                 preferences.getString(USER_EMAIL, ""),
                 preferences.getString(USER_DISPLAY_NAME, ""),
                 currentLocation);

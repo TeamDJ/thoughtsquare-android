@@ -10,15 +10,10 @@ import java.util.Map;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.isNull;
 
-/**
- * Created by IntelliJ IDEA.
- * User: jottaway
- * Date: Aug 11, 2010
- * Time: 2:45:20 PM
- * To change this template use File | Settings | File Templates.
- */
+
 public class AHTTPClientIntegrationTest {
     private AHTTPClient ahttpClient;
 
@@ -33,10 +28,19 @@ public class AHTTPClientIntegrationTest {
         postParams.put("user[display_name]", "foo");
         postParams.put("user[email]", "foo@bar.com");
 
-        AHTTPResponse response = ahttpClient.post("http://thoughtsquare.heroku.com/users.json", postParams);
+        AHTTPResponse response = ahttpClient.post("http://localhost:2010/users.json", postParams);
 
         assertThat(response.getResponseStatus(), is(HttpStatus.SC_CREATED));
-        assertThat(response.getResponseBody(), not(isNull()));
+        assertTrue(response.getResponseBody().contains("foo"));
+    }
+    
+    @Test
+    public void shouldBeAbleToDoSecondRequest(){
+        Map<String, String> postParams = new HashMap<String, String>();
+               postParams.put("user[display_name]", "foo");
+               postParams.put("user[email]", "foo@bar.com");
+        ahttpClient.post("http://localhost:2010/users.json", postParams);
+        ahttpClient.post("http://localhost:2010/users.json", postParams);
     }
 
     @Test
