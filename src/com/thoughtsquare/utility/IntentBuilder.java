@@ -6,8 +6,6 @@ import android.os.Parcelable;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.thoughtsquare.intent.IntentActions.LOCATION_UPDATED;
-
 public class IntentBuilder {
 
     private String action;

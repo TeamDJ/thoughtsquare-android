@@ -31,10 +31,10 @@ public class LocationAutoUpdater implements LocationListener{
         //TODO there may be a better way of doing this, eg. with proximity alerts
         com.thoughtsquare.domain.Location resolvedLocation = locationsProvider.findContainingLocation(location);
         if(resolvedLocation != null){
-            user.updateLocation(resolvedLocation);
-
             Intent intent = intentBuilder.withAction(LOCATION_UPDATED).withParcelable("location", resolvedLocation).build();
             context.sendBroadcast(intent);
+
+            user.updateLocation(resolvedLocation);
         }
 
     }

@@ -12,6 +12,7 @@ import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
@@ -46,10 +47,11 @@ public class LocationAutoUpdaterTest{
 
         locationAutoUpdater.onLocationChanged(location);
 
-        verify(user).updateLocation(foundLocation);
         verify(intentBuilder).withAction(IntentActions.LOCATION_UPDATED);
         verify(intentBuilder).withParcelable("location", foundLocation);
-        verify(context).sendBroadcast(intent);
+        InOrder inorder = inOrder(context, user);
+        inorder.verify(context).sendBroadcast(intent); // this should run first to get quicker feedback
+        inorder.verify(user).updateLocation(foundLocation);
     }
 
     @Test

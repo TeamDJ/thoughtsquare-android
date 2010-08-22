@@ -1,8 +1,10 @@
 package com.thoughtsquare.activity;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Criteria;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -13,13 +15,18 @@ import com.thoughtsquare.R;
 import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.domain.User;
 import com.thoughtsquare.domain.UserProvider;
+import com.thoughtsquare.intent.IntentActions;
+import com.thoughtsquare.intent.LocationUpdateReceiver;
+import com.thoughtsquare.intent.OnLocationUpdate;
 import com.thoughtsquare.service.LocationsProvider;
 import com.thoughtsquare.utility.AHTTPClient;
 import com.thoughtsquare.utility.ConfigLoader;
+import com.thoughtsquare.utility.IntentBuilder;
 
 import static android.preference.PreferenceManager.*;
+import static com.thoughtsquare.intent.IntentActions.LOCATION_UPDATED;
 
-public class ThoughtSquareActivity extends Activity {
+public class ThoughtSquareActivity extends Activity implements OnLocationUpdate{
     private static final int REGISTER_ACTIVITY = 0;
     private static final int UPDATE_LOCATION_ACTIVITY = 1;
     private UserProvider userProvider;
@@ -75,9 +82,14 @@ public class ThoughtSquareActivity extends Activity {
 
         //TODO what provider should we be using and how long should we be polling - config?
         String bestProvider = locationManager.getBestProvider(new Criteria(), true);
-        locationManager.requestLocationUpdates(bestProvider, 0, 0, new LocationAutoUpdater(userProvider.getUser(), locationsProvider));
+        locationManager.requestLocationUpdates(bestProvider, 0, 0,
+                new LocationAutoUpdater(new IntentBuilder(), getContext(), userProvider.getUser(), locationsProvider));
 
+        // update this view when location changes
+        getContext().registerReceiver(new LocationUpdateReceiver(this), new IntentFilter(LOCATION_UPDATED));
     }
+
+
 
     private void startRegisterActivity() {
         Intent i = new Intent(this, RegisterActivity.class);
@@ -107,4 +119,7 @@ public class ThoughtSquareActivity extends Activity {
     }
 
 
+    public void update(Location location) {
+        showLocation(location);
+    }
 }
