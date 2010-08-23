@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import com.thoughtsquare.R;
+import com.thoughtsquare.criteria.LocationManagerProviderCriteria;
 import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.domain.User;
 import com.thoughtsquare.domain.UserProvider;
@@ -79,7 +80,7 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate{
         LocationManager locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
         //TODO what provider should we be using and how long should we be polling - config?
-        String bestProvider = locationManager.getBestProvider(new Criteria(), true);
+        String bestProvider = locationManager.getBestProvider(new LocationManagerProviderCriteria(), true);
         locationManager.requestLocationUpdates(bestProvider, 0, 0,
                 new LocationAutoUpdater(new IntentBuilder(), getContext(), userProvider.getUser(), locationsProvider));
 
