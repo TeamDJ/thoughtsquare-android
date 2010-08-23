@@ -9,14 +9,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import com.thoughtsquare.R;
+import com.thoughtsquare.async.RegisterUserTask;
 import com.thoughtsquare.domain.User;
 import com.thoughtsquare.domain.UserProvider;
 import com.thoughtsquare.utility.AHTTPClient;
 import com.thoughtsquare.utility.Config;
 import com.thoughtsquare.utility.ConfigLoader;
 
+import java.util.concurrent.ExecutionException;
+
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
-import static com.thoughtsquare.Preferences.*;
 
 public class RegisterActivity extends Activity {
 
@@ -31,7 +33,6 @@ public class RegisterActivity extends Activity {
         final Config config = new ConfigLoader().getConfig(this);
         final UserProvider userProvider = new UserProvider(getDefaultSharedPreferences(this), new AHTTPClient(), config);
 
-
         Button registerButton = (Button) findViewById(R.id.registerButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
 
@@ -41,7 +42,16 @@ public class RegisterActivity extends Activity {
 
                 final User user = userProvider.createUser(emailAddress, displayName);
 
-                if (user.register()) {
+                boolean registerSuccess = false;
+                try {
+                    registerSuccess = new RegisterUserTask().execute(user).get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+                
+                if (registerSuccess) {
                     Bundle extras = new Bundle();
                     extras.putString("displayName", displayName);
                     extras.putString("emailAddress", emailAddress);
