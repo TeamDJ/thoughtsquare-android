@@ -45,9 +45,7 @@ public class RegisterActivity extends Activity {
 
                 boolean registerSuccess = false;
                 try {
-//                    ProgressDialog register = ProgressDialog.show(getContext(), "", "Registering...");
                     registerSuccess = new RegisterUserTask(getContext()).execute(user).get();
-//                    register.dismiss();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (ExecutionException e) {

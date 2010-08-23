@@ -11,11 +11,11 @@ public class RegisterUserTask extends AsyncTask<User, Void, Boolean> {
 
     public RegisterUserTask(Context context) {
         spinner = new ProgressDialog(context);
+        spinner.setMessage("Registering...");
     }
 
     @Override
     protected void onPreExecute() {
-        spinner.setMessage("Registering...");
         spinner.show();
     }
 
