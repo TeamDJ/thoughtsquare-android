@@ -1,6 +1,7 @@
 package com.thoughtsquare.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -44,7 +45,9 @@ public class RegisterActivity extends Activity {
 
                 boolean registerSuccess = false;
                 try {
-                    registerSuccess = new RegisterUserTask().execute(user).get();
+//                    ProgressDialog register = ProgressDialog.show(getContext(), "", "Registering...");
+                    registerSuccess = new RegisterUserTask(getContext()).execute(user).get();
+//                    register.dismiss();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } catch (ExecutionException e) {
