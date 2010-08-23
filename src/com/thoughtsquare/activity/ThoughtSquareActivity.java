@@ -54,8 +54,8 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
         if (intent != null) {
-            super.onActivityResult(requestCode, resultCode, intent);
             Bundle extras = intent.getExtras();
             switch (requestCode) {
                 case REGISTER_ACTIVITY:
@@ -67,6 +67,14 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
                     userProvider.getUser().updateLocation(location);
                     break;
             }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!userProvider.userExists()) {
+            startRegisterActivity();
         }
     }
 
