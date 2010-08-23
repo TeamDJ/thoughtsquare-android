@@ -70,14 +70,6 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (!userProvider.userExists()) {
-            startRegisterActivity();
-        }
-    }
-
     private Context getContext() {
         return this;
     }
