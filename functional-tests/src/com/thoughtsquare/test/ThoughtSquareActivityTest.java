@@ -21,7 +21,7 @@ public class ThoughtSquareActivityTest extends ActivityInstrumentationTestCase2<
     public void setUp() throws Exception {
         activity = getActivity();
         solo = new Solo(getInstrumentation(), activity);
-       
+
     }
 
 
@@ -36,11 +36,9 @@ public class ThoughtSquareActivityTest extends ActivityInstrumentationTestCase2<
         assertEquals("Unknown", getText(R.id.current_location));
 
         solo.clickOnButton("Update Location");
-        solo.clickInList(0);
+        solo.clickInList(1);
         solo.waitForText("Hello");
-        assertEquals("Perth", getText(R.id.current_location));
-
-
+        assertEquals("Brisbane", getText(R.id.current_location));
     }
 
     private String getText(int viewId) {

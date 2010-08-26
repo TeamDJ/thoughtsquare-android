@@ -1,6 +1,7 @@
 package com.thoughtsquare.activity;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,24 +11,24 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.thoughtsquare.R;
+import com.thoughtsquare.domain.AddLocation;
 import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.service.LocationsProvider;
 
 import java.util.List;
 
 public class UpdateLocationActivity extends ListActivity {
-    private LocationsProvider locationsProvider;
+    private static final int ADD_LOCATION_ACTIVITY = 0;
+
     private List<Location> locations;
 
     public UpdateLocationActivity() {
-        locationsProvider = new LocationsProvider();
-        
-        locations = locationsProvider.getLocations();
+        locations = new LocationsProvider().getLocations();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);    
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.update_location);
 
         setListAdapter(new LocationAdapter());
@@ -35,13 +36,20 @@ public class UpdateLocationActivity extends ListActivity {
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        Bundle extras = new Bundle();
-        extras.putParcelable("location", locations.get(position));
+        Location location = locations.get(position);
 
-        Intent mIntent = new Intent();
-        mIntent.putExtras(extras);
-        setResult(RESULT_OK, mIntent);
-        finish();
+        if (location instanceof AddLocation) {
+            Intent i = new Intent(getContext(), AddLocationActivity.class);
+            startActivityForResult(i, ADD_LOCATION_ACTIVITY);
+        } else {
+            Bundle extras = new Bundle();
+            extras.putParcelable("location", location);
+
+            Intent mIntent = new Intent();
+            mIntent.putExtras(extras);
+            setResult(RESULT_OK, mIntent);
+            finish();
+        }
     }
 
     class LocationAdapter extends ArrayAdapter<Location> {
@@ -54,10 +62,14 @@ public class UpdateLocationActivity extends ListActivity {
             LayoutInflater inflater = getLayoutInflater();
             View row = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
 
-            TextView text = (TextView)row.findViewById(android.R.id.text1);
+            TextView text = (TextView) row.findViewById(android.R.id.text1);
             text.setText(locations.get(position).getTitle());
 
             return row;
         }
+    }
+
+    private Context getContext() {
+        return this;
     }
 }
