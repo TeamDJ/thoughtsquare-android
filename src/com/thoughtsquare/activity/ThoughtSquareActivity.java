@@ -33,6 +33,7 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
     private static final int UPDATE_LOCATION_ACTIVITY = 1;
     private UserProvider userProvider;
     private LocationsProvider locationsProvider;
+    private LocationUpdateReceiver locationUpdateReceiver;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,7 +94,8 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
                 new LocationAutoUpdater(new IntentBuilder(), getContext(), userProvider.getUser(), locationsProvider));
 
         // update this view when location changes
-        getContext().registerReceiver(new LocationUpdateReceiver(this), new IntentFilter(LOCATION_UPDATED));
+        locationUpdateReceiver = new LocationUpdateReceiver(this);
+        getContext().registerReceiver(locationUpdateReceiver, new IntentFilter(LOCATION_UPDATED));
     }
 
 
@@ -127,5 +129,11 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
 
     public void update(Location location) {
         showLocation(location);
+    }
+
+    @Override
+    protected void onDestroy() {
+        getContext().unregisterReceiver(locationUpdateReceiver);
+        super.onDestroy();
     }
 }
