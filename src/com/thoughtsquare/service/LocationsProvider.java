@@ -1,5 +1,6 @@
 package com.thoughtsquare.service;
 
+import com.thoughtsquare.domain.AddLocation;
 import com.thoughtsquare.domain.Location;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class LocationsProvider {
         locations.add(new Location(3, "Sydney", -33.867138, 151.207108, CITY_RADIUS));
         locations.add(new Location(4, "Melbourne", -37.814251, 144.963165, CITY_RADIUS));
         locations.add(new Location(5, "Perth", -31.9554, 115.858589, CITY_RADIUS));
+        locations.add(new AddLocation());
 
         return locations;
     }

@@ -71,4 +71,5 @@ public class Location implements Parcelable {
         thisLocation.setLongitude(longitude);
         return otherLocation.distanceTo(thisLocation) <= radius;
     }
+
 }
