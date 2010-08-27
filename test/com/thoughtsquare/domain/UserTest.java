@@ -97,6 +97,20 @@ public class UserTest {
         verify(userProvider).saveUser(user);
     }
 
+    @Test
+    public void shouldSaveLocationEvenIfHttpPutFails(){
+        User user = new User(userProvider, client, config, 5, MY_EMAIL, MY_DISPLAY, null);
+
+        Location newLocation = mock(Location.class);
+
+        when(newLocation.getId()).thenReturn(NEW_LOCATION_ID);
+        when(response.getResponseStatus()).thenReturn(500);
+
+        user.updateLocation(newLocation);
+
+        verify(userProvider).saveUser(user);
+    }
+
     private Map<String, String> verifyRegisterPostParams() {
         Map<String, String> postParams = new HashMap<String, String>();
         postParams.put("user[display_name]", MY_DISPLAY);
