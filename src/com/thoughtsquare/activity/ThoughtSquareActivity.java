@@ -18,6 +18,7 @@ import com.thoughtsquare.domain.UserProvider;
 import com.thoughtsquare.intent.LocationUpdateReceiver;
 import com.thoughtsquare.intent.OnLocationUpdate;
 import com.thoughtsquare.service.LocationsProvider;
+import com.thoughtsquare.service.NotificationService;
 import com.thoughtsquare.utility.AHTTPClient;
 import com.thoughtsquare.utility.ConfigLoader;
 import com.thoughtsquare.utility.IntentBuilder;
@@ -55,6 +56,8 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
         }
 
         setupAutoLocationUpdater();
+
+        startService(new Intent(this, NotificationService.class));
     }
 
     @Override
@@ -81,9 +84,6 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
         new UpdateLocationTask().execute(userLocation);
     }
 
-    private Context getContext() {
-        return this;
-    }
 
     private void setupAutoLocationUpdater() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -91,11 +91,11 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
         //TODO what provider should we be using and how long should we be polling - config?
         String bestProvider = locationManager.getBestProvider(new LocationManagerProviderCriteria(), true);
         locationManager.requestLocationUpdates(bestProvider, 0, 0,
-                new LocationAutoUpdater(new IntentBuilder(), getContext(), userProvider.getUser(), locationsProvider));
+                new LocationAutoUpdater(new IntentBuilder(), this, userProvider.getUser(), locationsProvider));
 
         // update this view when location changes
         locationUpdateReceiver = new LocationUpdateReceiver(this);
-        getContext().registerReceiver(locationUpdateReceiver, new IntentFilter(LOCATION_UPDATED));
+        this.registerReceiver(locationUpdateReceiver, new IntentFilter(LOCATION_UPDATED));
     }
 
 
@@ -109,7 +109,7 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
         updateLocation.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                Intent i = new Intent(getContext(), UpdateLocationActivity.class);
+                Intent i = new Intent(ThoughtSquareActivity.this, UpdateLocationActivity.class);
                 startActivityForResult(i, UPDATE_LOCATION_ACTIVITY);
             }
         });
@@ -133,7 +133,7 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
 
     @Override
     protected void onDestroy() {
-        getContext().unregisterReceiver(locationUpdateReceiver);
+        this.unregisterReceiver(locationUpdateReceiver);
         super.onDestroy();
     }
 }
