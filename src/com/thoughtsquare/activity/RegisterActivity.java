@@ -1,9 +1,9 @@
 package com.thoughtsquare.activity;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -22,6 +22,9 @@ import java.util.concurrent.ExecutionException;
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 public class RegisterActivity extends Activity {
+    private AsyncTask<User, Void, Boolean> registerUserTask;
+    private String displayName;
+    private String emailAddress;
 
     /**
      * Called when the activity is first created.
@@ -38,35 +41,39 @@ public class RegisterActivity extends Activity {
         registerButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                String displayName = getTextFromTextBox(R.id.displayName);
-                String emailAddress = getTextFromTextBox(R.id.emailAddress);
+                displayName = getTextFromTextBox(R.id.displayName);
+                emailAddress = getTextFromTextBox(R.id.emailAddress);
 
                 final User user = userProvider.createUser(emailAddress, displayName);
 
-                boolean registerSuccess = false;
-                try {
-                    registerSuccess = new RegisterUserTask(getContext()).execute(user).get();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-                
-                if (registerSuccess) {
-                    Bundle extras = new Bundle();
-                    extras.putString("displayName", displayName);
-                    extras.putString("emailAddress", emailAddress);
-
-                    Intent mIntent = new Intent();
-                    mIntent.putExtras(extras);
-                    setResult(RESULT_OK, mIntent);
-                    finish();
-                }
-
-                //TODO: What to do when userService cannot register user?
+                registerUserTask = new RegisterUserTask(RegisterActivity.this).execute(user);
             }
 
         });
+    }
+
+    public void onFinishRegisterTask() {
+        boolean registerSuccess = false;
+        try {
+            registerSuccess = registerUserTask.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        if (registerSuccess) {
+            Bundle extras = new Bundle();
+            extras.putString("displayName", displayName);
+            extras.putString("emailAddress", emailAddress);
+
+            Intent mIntent = new Intent();
+            mIntent.putExtras(extras);
+            setResult(RESULT_OK, mIntent);
+            finish();
+        }
+
+        //TODO: What to do when userService cannot register user?
     }
 
     @Override

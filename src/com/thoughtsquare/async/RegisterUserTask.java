@@ -8,8 +8,10 @@ import com.thoughtsquare.domain.User;
 
 public class RegisterUserTask extends AsyncTask<User, Void, Boolean> {
     private ProgressDialog spinner;
+    private RegisterActivity context;
 
-    public RegisterUserTask(Context context) {
+    public RegisterUserTask(RegisterActivity context) {
+        this.context = context;
         spinner = new ProgressDialog(context);
         spinner.setMessage("Registering...");
     }
@@ -33,5 +35,6 @@ public class RegisterUserTask extends AsyncTask<User, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean aBoolean) {
         spinner.dismiss();
+        context.onFinishRegisterTask();
     }
 }
