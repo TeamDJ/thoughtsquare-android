@@ -5,6 +5,7 @@ import com.thoughtsquare.utility.AHTTPClient;
 import com.thoughtsquare.utility.AHTTPResponse;
 import com.thoughtsquare.utility.Config;
 import com.thoughtsquare.utility.JSONObject;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -12,7 +13,9 @@ import java.util.Map;
 
 import static java.lang.String.valueOf;
 import static org.apache.http.HttpStatus.SC_CREATED;
+import static org.apache.http.HttpStatus.SC_UNPROCESSABLE_ENTITY;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.anyMap;
 import static org.mockito.Matchers.anyString;
@@ -24,13 +27,15 @@ public class LocationServiceTest {
     private static final String TITLE = "Brisbane";
     private static final double LATITUDE = -27.467581;
     private static final double LONGITUDE = 153.027893;
+    private LocationService service;
+    private AHTTPClient httpClient;
+    private AHTTPResponse response;
 
-    @Test
-    public void shouldAddLocationUsingHttpClient() {
-        AHTTPResponse response = mock(AHTTPResponse.class);
-        AHTTPClient httpClient = mock(AHTTPClient.class);
+    @Before
+    public void setup() {
+        response = mock(AHTTPResponse.class);
+        httpClient = mock(AHTTPClient.class);
         Config config = mock(Config.class);
-        LocationService service = new LocationService(config, httpClient);
         JSONObject jsonLocation = mock(JSONObject.class);
 
         when(config.getServerBaseURL()).thenReturn(BASE_URL);
@@ -39,6 +44,11 @@ public class LocationServiceTest {
         when(response.getJSONResponse()).thenReturn(jsonLocation);
         when(httpClient.post(anyString(), anyMap())).thenReturn(response);
 
+        service = new LocationService(config, httpClient);
+    }
+
+    @Test
+    public void shouldAddLocationUsingHttpClient() {
         Location location = service.addLocation(TITLE, LATITUDE, LONGITUDE);
 
         assertThat(location.getId(), is(ID));
@@ -47,6 +57,13 @@ public class LocationServiceTest {
         assertThat(location.getLongitude(), is(LONGITUDE));
 
         verify(httpClient).post(BASE_URL + "/locations.json", verifyAddLocationParams());
+    }
+
+    @Test
+    public void shouldReturnNullIfHttpPostFails() {
+        when(response.getResponseStatus()).thenReturn(SC_UNPROCESSABLE_ENTITY);
+
+        assertThat(service.addLocation(TITLE, LATITUDE, LONGITUDE), equalTo(null));
     }
 
     private Map<String, String> verifyAddLocationParams() {

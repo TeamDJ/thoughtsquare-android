@@ -5,6 +5,7 @@ import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.utility.AHTTPClient;
 import com.thoughtsquare.utility.AHTTPResponse;
 import com.thoughtsquare.utility.Config;
+import org.apache.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,8 +56,13 @@ public class LocationService {
         postParams.put("location[title]", title);
         postParams.put("location[latitude]", valueOf(latitude));
         postParams.put("location[longitude]", valueOf(longitude));
+
         AHTTPResponse response = httpClient.post(config.getServerBaseURL() + "/locations.json", postParams);
-        int id = response.getJSONResponse().getInt("id");
-        return new Location(id, title, latitude, longitude, CITY_RADIUS);
+
+        if (response.getResponseStatus() == HttpStatus.SC_CREATED) {
+            int id = response.getJSONResponse().getInt("id");
+            return new Location(id, title, latitude, longitude, CITY_RADIUS);
+        }
+        return null;
     }
 }
