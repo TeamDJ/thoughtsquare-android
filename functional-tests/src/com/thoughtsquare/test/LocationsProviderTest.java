@@ -1,10 +1,7 @@
 package com.thoughtsquare.test;
 
 import android.test.InstrumentationTestCase;
-import com.thoughtsquare.domain.Location;
-import com.thoughtsquare.service.LocationsProvider;
-
-import java.util.List;
+import com.thoughtsquare.service.LocationService;
 
 public class LocationsProviderTest extends InstrumentationTestCase {
 
@@ -14,9 +11,9 @@ public class LocationsProviderTest extends InstrumentationTestCase {
         brisbaneLocation.setLatitude(-27.465698);
         brisbaneLocation.setLongitude(153.027733);
 
-        LocationsProvider locationsProvider = new LocationsProvider();
+        LocationService locationService = new LocationService();
 
-        assertEquals("Brisbane", locationsProvider.findContainingLocation(brisbaneLocation).getTitle());
+        assertEquals("Brisbane", locationService.findContainingLocation(brisbaneLocation).getTitle());
     }
 
     public void testFindContainingLocationWhenContainingLocationDoesntExist(){
@@ -24,9 +21,9 @@ public class LocationsProviderTest extends InstrumentationTestCase {
         canberraLocation.setLatitude(-35.244297);
         canberraLocation.setLongitude(149.047327);
 
-        LocationsProvider locationsProvider = new LocationsProvider();
+        LocationService locationService = new LocationService();
 
-        assertNull(locationsProvider.findContainingLocation(canberraLocation));
+        assertNull(locationService.findContainingLocation(canberraLocation));
     }
 
 

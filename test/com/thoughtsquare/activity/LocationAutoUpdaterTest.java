@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.domain.User;
 import com.thoughtsquare.intent.IntentActions;
-import com.thoughtsquare.service.LocationsProvider;
+import com.thoughtsquare.service.LocationService;
 import com.thoughtsquare.utility.IntentBuilder;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +17,7 @@ import static org.mockito.Mockito.*;
 
 public class LocationAutoUpdaterTest{
     private User user;
-    private LocationsProvider locationsProvider;
+    private LocationService locationService;
     private LocationAutoUpdater locationAutoUpdater;
     private Context context;
     private IntentBuilder intentBuilder;
@@ -25,17 +25,17 @@ public class LocationAutoUpdaterTest{
     @Before
     public void setup() {
         user = mock(User.class);
-        locationsProvider = mock(LocationsProvider.class);
+        locationService = mock(LocationService.class);
         context = mock(Context.class);
         intentBuilder = mock(IntentBuilder.class);
-        locationAutoUpdater = new LocationAutoUpdater(intentBuilder, context, user, locationsProvider);
+        locationAutoUpdater = new LocationAutoUpdater(intentBuilder, context, user, locationService);
     }
 
     @Test
     public void shouldUpdateUsersLocationAndSendBroadcastWhenLocationIsFound() {
         android.location.Location location = mock(android.location.Location.class);
         Location foundLocation = mock(Location.class);
-        when(locationsProvider.findContainingLocation(location)).thenReturn(foundLocation);
+        when(locationService.findContainingLocation(location)).thenReturn(foundLocation);
         Intent intent = mock(Intent.class);
         when(intentBuilder.withAction(anyString())).thenReturn(intentBuilder);
         when(intentBuilder.withParcelable(anyString(), any(Parcelable.class))).thenReturn(intentBuilder);
@@ -53,7 +53,7 @@ public class LocationAutoUpdaterTest{
     @Test
     public void shouldNotUpdateUsersLocationWhenLocationIsNotKnown() {
         android.location.Location location = mock(android.location.Location.class);
-        when(locationsProvider.findContainingLocation(location)).thenReturn(null);
+        when(locationService.findContainingLocation(location)).thenReturn(null);
 
         locationAutoUpdater.onLocationChanged(location);
 

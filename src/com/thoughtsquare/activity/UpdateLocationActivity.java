@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.thoughtsquare.R;
 import com.thoughtsquare.domain.AddLocation;
 import com.thoughtsquare.domain.Location;
-import com.thoughtsquare.service.LocationsProvider;
+import com.thoughtsquare.service.LocationService;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ public class UpdateLocationActivity extends ListActivity {
     private List<Location> locations;
 
     public UpdateLocationActivity() {
-        locations = new LocationsProvider().getLocations();
+        locations = new LocationService().getLocations();
     }
 
     @Override

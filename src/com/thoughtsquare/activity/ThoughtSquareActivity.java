@@ -17,7 +17,7 @@ import com.thoughtsquare.domain.User;
 import com.thoughtsquare.domain.UserProvider;
 import com.thoughtsquare.intent.LocationUpdateReceiver;
 import com.thoughtsquare.intent.OnLocationUpdate;
-import com.thoughtsquare.service.LocationsProvider;
+import com.thoughtsquare.service.LocationService;
 import com.thoughtsquare.service.NotificationService;
 import com.thoughtsquare.utility.AHTTPClient;
 import com.thoughtsquare.utility.ConfigLoader;
@@ -33,7 +33,7 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
     private static final int REGISTER_ACTIVITY = 0;
     private static final int UPDATE_LOCATION_ACTIVITY = 1;
     private UserProvider userProvider;
-    private LocationsProvider locationsProvider;
+    private LocationService locationService;
     private LocationUpdateReceiver locationUpdateReceiver;
 
     @Override
@@ -41,7 +41,7 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         userProvider = new UserProvider(getDefaultSharedPreferences(this), new AHTTPClient(), new ConfigLoader().getConfig(this));
-        locationsProvider = new LocationsProvider();
+        locationService = new LocationService();
 
         setupUpdateLocationButton();
 
@@ -91,7 +91,7 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
         //TODO what provider should we be using and how long should we be polling - config?
         String bestProvider = locationManager.getBestProvider(new LocationManagerProviderCriteria(), true);
         locationManager.requestLocationUpdates(bestProvider, 0, 0,
-                new LocationAutoUpdater(new IntentBuilder(), this, userProvider.getUser(), locationsProvider));
+                new LocationAutoUpdater(new IntentBuilder(), this, userProvider.getUser(), locationService));
 
         // update this view when location changes
         locationUpdateReceiver = new LocationUpdateReceiver(this);

@@ -6,7 +6,7 @@ import com.thoughtsquare.domain.Location;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LocationsProvider {
+public class LocationService {
     private static final int CITY_RADIUS = 100000;
 
     public List<Location> getLocations() {
