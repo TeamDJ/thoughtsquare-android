@@ -7,11 +7,9 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.isNull;
 
 
 public class AHTTPClientIntegrationTest {
@@ -33,12 +31,12 @@ public class AHTTPClientIntegrationTest {
         assertThat(response.getResponseStatus(), is(HttpStatus.SC_CREATED));
         assertTrue(response.getResponseBody().contains("foo"));
     }
-    
+
     @Test
-    public void shouldBeAbleToDoSecondRequest(){
+    public void shouldBeAbleToDoSecondRequest() {
         Map<String, String> postParams = new HashMap<String, String>();
-               postParams.put("user[display_name]", "foo");
-               postParams.put("user[email]", "foo@bar.com");
+        postParams.put("user[display_name]", "foo");
+        postParams.put("user[email]", "foo@bar.com");
         ahttpClient.post("http://localhost:2010/users.json", postParams);
         ahttpClient.post("http://localhost:2010/users.json", postParams);
     }
@@ -53,6 +51,18 @@ public class AHTTPClientIntegrationTest {
         AHTTPResponse response = ahttpClient.put("http://thoughtsquare.heroku.com/users/1.json", params);
 
         assertThat(response.getResponseStatus(), is(HttpStatus.SC_OK));
+    }
+
+    @Test
+    public void shouldAddLocationSuccessfully() {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("location[title]", "Test Location");
+        params.put("location[latitude]", "-12.34");
+        params.put("location[longitude]", "666");
+
+        AHTTPResponse response = ahttpClient.post("http://thoughtsquare.heroku.com/locations.json", params);
+
+        assertThat(response.getResponseStatus(), is(HttpStatus.SC_CREATED));
     }
 
     //TODO: Clean up created user after test.
