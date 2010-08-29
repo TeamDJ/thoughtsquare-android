@@ -9,8 +9,16 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigLoader {
+    private static Config config = null;
 
-    public Config getConfig(Context context){
+    public Config getConfig(Context context) {
+        if (config == null) {
+            config = getConfigFromAndroid(context);
+        }
+        return config;
+    }
+
+    private Config getConfigFromAndroid(Context context) {
         Resources resources = context.getResources();
         AssetManager assetManager = resources.getAssets();
 
