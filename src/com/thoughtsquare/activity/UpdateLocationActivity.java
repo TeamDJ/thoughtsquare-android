@@ -52,6 +52,23 @@ public class UpdateLocationActivity extends ListActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (intent != null) {
+            Bundle extras = intent.getExtras();
+            switch (requestCode) {
+                case ADD_LOCATION_ACTIVITY:
+                    Location location = extras.getParcelable("location");
+                    AddLocation addLocation = (AddLocation) locations.get(locations.size() - 1);
+                    locations.remove(addLocation);
+                    locations.add(location);
+                    locations.add(addLocation);
+                    break;
+            }
+        }
+    }
+
     class LocationAdapter extends ArrayAdapter<Location> {
         LocationAdapter() {
             super(UpdateLocationActivity.this, android.R.layout.simple_list_item_1, locations);
