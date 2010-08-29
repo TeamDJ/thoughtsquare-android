@@ -1,10 +1,12 @@
 package com.thoughtsquare.service;
 
+import android.content.Context;
 import com.thoughtsquare.domain.AddLocation;
 import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.utility.AHTTPClient;
 import com.thoughtsquare.utility.AHTTPResponse;
 import com.thoughtsquare.utility.Config;
+import com.thoughtsquare.utility.ConfigLoader;
 import org.apache.http.HttpStatus;
 
 import java.util.ArrayList;
@@ -20,9 +22,9 @@ public class LocationService {
     private Config config;
     private AHTTPClient httpClient;
 
-    public LocationService() {
+    public LocationService(Context context) {
         this.httpClient = new AHTTPClient();
-//        this.config = new ConfigLoader().getConfig();
+        this.config = new ConfigLoader().getConfig(context);
     }
 
     public LocationService(Config config, AHTTPClient httpClient) {
@@ -60,7 +62,7 @@ public class LocationService {
         AHTTPResponse response = httpClient.post(config.getServerBaseURL() + "/locations.json", postParams);
 
         if (response.getResponseStatus() == HttpStatus.SC_CREATED) {
-            int id = response.getJSONResponse().getInt("id");
+            int id = response.getJSONResponse().getJSONObject("location").getInt("id");
             return new Location(id, title, latitude, longitude, CITY_RADIUS);
         }
         return null;

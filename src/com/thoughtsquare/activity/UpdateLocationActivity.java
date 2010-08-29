@@ -23,7 +23,7 @@ public class UpdateLocationActivity extends ListActivity {
     private List<Location> locations;
 
     public UpdateLocationActivity() {
-        locations = new LocationService().getLocations();
+        locations = new LocationService(this).getLocations();
     }
 
     @Override

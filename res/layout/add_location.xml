@@ -28,8 +28,8 @@
               android:inputType="numberDecimal"
             />
 
-    <Button android:id="@+id/registerButton"
-            android:text="@string/register"
+    <Button android:id="@+id/addLocation"
+            android:text="@string/addLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />

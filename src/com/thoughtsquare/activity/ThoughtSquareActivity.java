@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.thoughtsquare.intent.OnLocationUpdate;
 import com.thoughtsquare.service.LocationService;
 import com.thoughtsquare.service.NotificationService;
 import com.thoughtsquare.utility.AHTTPClient;
+import com.thoughtsquare.utility.Config;
 import com.thoughtsquare.utility.ConfigLoader;
 import com.thoughtsquare.utility.IntentBuilder;
 
@@ -40,8 +42,13 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        userProvider = new UserProvider(getDefaultSharedPreferences(this), new AHTTPClient(), new ConfigLoader().getConfig(this));
-        locationService = new LocationService();
+
+        Config config = new ConfigLoader().getConfig(this);
+        AHTTPClient httpClient = new AHTTPClient();
+        SharedPreferences preferences = getDefaultSharedPreferences(this);
+
+        userProvider = new UserProvider(preferences, httpClient, config);
+        locationService = new LocationService(config, httpClient);
 
         setupUpdateLocationButton();
 

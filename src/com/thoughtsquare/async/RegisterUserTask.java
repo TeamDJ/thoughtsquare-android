@@ -1,18 +1,17 @@
 package com.thoughtsquare.async;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
 import com.thoughtsquare.activity.RegisterActivity;
 import com.thoughtsquare.domain.User;
 
 public class RegisterUserTask extends AsyncTask<User, Void, Boolean> {
     private ProgressDialog spinner;
-    private RegisterActivity context;
+    private RegisterActivity activity;
 
-    public RegisterUserTask(RegisterActivity context) {
-        this.context = context;
-        spinner = new ProgressDialog(context);
+    public RegisterUserTask(RegisterActivity activity) {
+        this.activity = activity;
+        spinner = new ProgressDialog(activity);
         spinner.setMessage("Registering...");
     }
 
@@ -35,6 +34,6 @@ public class RegisterUserTask extends AsyncTask<User, Void, Boolean> {
     @Override
     protected void onPostExecute(Boolean aBoolean) {
         spinner.dismiss();
-        context.onFinishRegisterTask();
+        activity.onFinishRegisterTask();
     }
 }

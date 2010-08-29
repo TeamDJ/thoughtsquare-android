@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">ThoughtSquare</string>
     <string name="register">Register</string>
+    <string name="addLocation">Add Location</string>
     <string name="update_location">Update Location</string>
     <string name="displayNameLabel">Display Name</string>
     <string name="usernameLabel">Email Address</string>

@@ -36,12 +36,14 @@ public class LocationServiceTest {
         response = mock(AHTTPResponse.class);
         httpClient = mock(AHTTPClient.class);
         Config config = mock(Config.class);
+        JSONObject jsonResponse = mock(JSONObject.class);
         JSONObject jsonLocation = mock(JSONObject.class);
 
         when(config.getServerBaseURL()).thenReturn(BASE_URL);
+        when(jsonResponse.getJSONObject("location")).thenReturn(jsonLocation);
         when(jsonLocation.getInt("id")).thenReturn(ID);
         when(response.getResponseStatus()).thenReturn(SC_CREATED);
-        when(response.getJSONResponse()).thenReturn(jsonLocation);
+        when(response.getJSONResponse()).thenReturn(jsonResponse);
         when(httpClient.post(anyString(), anyMap())).thenReturn(response);
 
         service = new LocationService(config, httpClient);
