@@ -3,7 +3,9 @@ package com.thoughtsquare.domain;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Location implements Parcelable {
+import java.io.Serializable;
+
+public class Location implements Parcelable, Serializable {
     private int id;
     private String title;
     private double latitude;
