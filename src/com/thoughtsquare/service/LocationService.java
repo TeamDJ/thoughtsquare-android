@@ -1,6 +1,7 @@
 package com.thoughtsquare.service;
 
 import android.content.Context;
+import com.thoughtsquare.db.LocationProvider;
 import com.thoughtsquare.domain.AddLocation;
 import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.utility.AHTTPClient;
@@ -21,24 +22,24 @@ public class LocationService {
 
     private Config config;
     private AHTTPClient httpClient;
+    private LocationProvider provider;
 
     public LocationService(Context context) {
         this.httpClient = new AHTTPClient();
         this.config = new ConfigLoader().getConfig(context);
+        this.provider = new LocationProvider(context);
     }
 
-    public LocationService(Config config, AHTTPClient httpClient) {
+    public LocationService(Config config, AHTTPClient httpClient, LocationProvider provider) {
         this.config = config;
         this.httpClient = httpClient;
+        this.provider = provider;
     }
 
     public List<Location> getLocations() {
         List<Location> locations = new ArrayList<Location>();
 
-        locations.add(new Location(1, "Brisbane", -27.467581, 153.027893, CITY_RADIUS));
-        locations.add(new Location(2, "Sydney", -33.867138, 151.207108, CITY_RADIUS));
-        locations.add(new Location(3, "Melbourne", -37.814251, 144.963165, CITY_RADIUS));
-        locations.add(new Location(4, "Perth", -31.9554, 115.858589, CITY_RADIUS));
+        locations.addAll(provider.findAll());
         locations.add(new AddLocation());
 
         return locations;
@@ -63,7 +64,9 @@ public class LocationService {
 
         if (response.getResponseStatus() == HttpStatus.SC_CREATED) {
             int id = response.getJSONResponse().getJSONObject("location").getInt("id");
-            return new Location(id, title, latitude, longitude, CITY_RADIUS);
+            Location location = new Location(id, title, latitude, longitude, CITY_RADIUS);
+            provider.store(location);
+            return location;
         }
         return null;
     }

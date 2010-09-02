@@ -21,17 +21,19 @@ public class UpdateLocationActivity extends ListActivity {
     private static final int ADD_LOCATION_ACTIVITY = 0;
 
     private List<Location> locations;
-
-    public UpdateLocationActivity() {
-        locations = new LocationService(this).getLocations();
-    }
+    private LocationService service;
+    private LocationAdapter listAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.update_location);
 
-        setListAdapter(new LocationAdapter());
+        service = new LocationService(this);
+        locations = service.getLocations();
+        listAdapter = new LocationAdapter();
+
+        setListAdapter(listAdapter);
     }
 
     @Override
@@ -55,17 +57,17 @@ public class UpdateLocationActivity extends ListActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
+
+        Bundle extras = null;
         if (intent != null) {
-            Bundle extras = intent.getExtras();
-            switch (requestCode) {
-                case ADD_LOCATION_ACTIVITY:
-                    Location location = extras.getParcelable("location");
-                    AddLocation addLocation = (AddLocation) locations.get(locations.size() - 1);
-                    locations.remove(addLocation);
-                    locations.add(location);
-                    locations.add(addLocation);
-                    break;
-            }
+            extras = intent.getExtras();
+        }
+
+        switch (requestCode) {
+            case ADD_LOCATION_ACTIVITY:
+                Location location = extras.getParcelable("location");
+                listAdapter.insert(location, locations.size() - 1);
+                break;
         }
     }
 
