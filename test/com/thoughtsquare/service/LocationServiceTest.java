@@ -1,10 +1,12 @@
 package com.thoughtsquare.service;
 
+import com.thoughtsquare.db.LocationProvider;
 import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.utility.AHTTPClient;
 import com.thoughtsquare.utility.AHTTPResponse;
 import com.thoughtsquare.utility.Config;
 import com.thoughtsquare.utility.JSONObject;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,11 +14,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.String.valueOf;
+import static java.util.Arrays.asList;
 import static org.apache.http.HttpStatus.SC_CREATED;
 import static org.apache.http.HttpStatus.SC_UNPROCESSABLE_ENTITY;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Matchers.anyMap;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.*;
@@ -30,11 +32,15 @@ public class LocationServiceTest {
     private LocationService service;
     private AHTTPClient httpClient;
     private AHTTPResponse response;
+    private LocationProvider provider;
+    private Location location;
 
     @Before
     public void setup() {
         response = mock(AHTTPResponse.class);
         httpClient = mock(AHTTPClient.class);
+        provider = mock(LocationProvider.class);
+        location = mock(Location.class);
         Config config = mock(Config.class);
         JSONObject jsonResponse = mock(JSONObject.class);
         JSONObject jsonLocation = mock(JSONObject.class);
@@ -45,8 +51,16 @@ public class LocationServiceTest {
         when(response.getResponseStatus()).thenReturn(SC_CREATED);
         when(response.getJSONResponse()).thenReturn(jsonResponse);
         when(httpClient.post(anyString(), anyMap())).thenReturn(response);
+        when(provider.findAll()).thenReturn(asList(location));
 
-        service = new LocationService(config, httpClient);
+        service = new LocationService(config, httpClient, provider);
+    }
+
+    @Test
+    public void shouldGetLocationsFromProvider() {
+        assertThat(service.getLocations(), hasItem(location));
+        
+        verify(provider).findAll();
     }
 
     @Test

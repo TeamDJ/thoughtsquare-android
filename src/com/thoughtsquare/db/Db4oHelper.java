@@ -9,6 +9,8 @@ import com.thoughtsquare.domain.Location;
 
 import java.io.IOException;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class Db4oHelper {
     private static ObjectContainer oc = null;
     private Context context;
@@ -20,11 +22,11 @@ public class Db4oHelper {
     public ObjectContainer db() {
         try {
             if (oc == null || oc.ext().isClosed()) {
-                oc = Db4oEmbedded.openFile(dbConfig(), db4oDBFullPath(context));
+                oc = Db4oEmbedded.openFile(dbConfig(), context.getDir("data", MODE_PRIVATE) + "/" + "thoughtsquare.db4o");
             }
 
             return oc;
-        } catch (Exception ie) {
+        } catch (Exception ie) {                                                    
             Log.e(Db4oHelper.class.getName(), ie.toString());
             return null;
         }
@@ -38,12 +40,9 @@ public class Db4oHelper {
         return configuration;
     }
 
-    private String db4oDBFullPath(Context context) {
-        return context.getDir("data", 0) + "/" + "thoughtsquare.db4o";
-    }
-
     public void close() {
-        if (oc != null)
+        if (oc != null) {
             oc.close();
+        }
     }
 }

@@ -23,17 +23,30 @@ public class UpdateLocationActivity extends ListActivity {
     private static final int ADD_LOCATION_ACTIVITY = 0;
 
     private List<Location> locations;
+<<<<<<< HEAD
 
+=======
+    private LocationService service;
+    private LocationAdapter listAdapter;
+>>>>>>> FINALLY! wired up locations through db4o provider and can now add locations successfully
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+<<<<<<< HEAD
         LocationService locationService = new LocationService( new ConfigLoader().getConfig(this), new AHTTPClient());
         locations = locationService.getLocations();
 
         setContentView(R.layout.update_location);
         setListAdapter(new LocationAdapter());
+=======
+        service = new LocationService(this);
+        locations = service.getLocations();
+        listAdapter = new LocationAdapter();
+
+        setListAdapter(listAdapter);
+>>>>>>> FINALLY! wired up locations through db4o provider and can now add locations successfully
     }
 
     @Override
@@ -57,17 +70,17 @@ public class UpdateLocationActivity extends ListActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
+
+        Bundle extras = null;
         if (intent != null) {
-            Bundle extras = intent.getExtras();
-            switch (requestCode) {
-                case ADD_LOCATION_ACTIVITY:
-                    Location location = extras.getParcelable("location");
-                    AddLocation addLocation = (AddLocation) locations.get(locations.size() - 1);
-                    locations.remove(addLocation);
-                    locations.add(location);
-                    locations.add(addLocation);
-                    break;
-            }
+            extras = intent.getExtras();
+        }
+
+        switch (requestCode) {
+            case ADD_LOCATION_ACTIVITY:
+                Location location = extras.getParcelable("location");
+                listAdapter.insert(location, locations.size() - 1);
+                break;
         }
     }
 

@@ -12,6 +12,7 @@ import android.widget.Button;
 import com.thoughtsquare.R;
 import com.thoughtsquare.async.UpdateLocationTask;
 import com.thoughtsquare.criteria.LocationManagerProviderCriteria;
+import com.thoughtsquare.db.LocationProvider;
 import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.domain.User;
 import com.thoughtsquare.domain.UserProvider;
@@ -43,9 +44,10 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
         Config config = new ConfigLoader().getConfig(this);
         AHTTPClient httpClient = new AHTTPClient();
         SharedPreferences preferences = getDefaultSharedPreferences(this);
+        LocationProvider provider = new LocationProvider(this);
 
         userProvider = new UserProvider(preferences, httpClient, config);
-        locationService = new LocationService(config, httpClient);
+        locationService = new LocationService(config, httpClient, provider);
 
         setupUpdateLocationButton();
 
