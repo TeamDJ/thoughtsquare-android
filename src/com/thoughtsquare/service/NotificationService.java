@@ -11,6 +11,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 import com.thoughtsquare.activity.ThoughtSquareActivity;
+import com.thoughtsquare.domain.LocationEvent;
+
+import java.util.List;
 
 public class NotificationService extends Service {
 
@@ -26,37 +29,43 @@ public class NotificationService extends Service {
     public void onCreate() {
         super.onCreate();
 
-
         Runnable runnable = new Runnable() {
 
-        public void run() {
+            public void run() {
 
-            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                EventService eventService = new EventService();
+                List<LocationEvent> events = eventService.getEvents();
 
-            int icon = R.drawable.stat_notify_chat;
-            CharSequence tickerText = "Hello";
-            long when = System.currentTimeMillis();
-
-            Notification notification = new Notification(icon, tickerText, when);
-
-            Context context = getApplicationContext();
-            CharSequence contentTitle = "My notification";
-            CharSequence contentText = "Hello World!";
-
-            Intent notificationIntent = new Intent(context, ThoughtSquareActivity.class);
-            PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-            notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
-
-            mNotificationManager.notify(count++, notification);
-
-            Log.e("foo", "foofoo");
-
-            handler.postDelayed(this, 30000);
-        }
-
+                for (LocationEvent event : events) {
+                    sendNotification(event);
+                }
+                handler.postDelayed(this, 30000);
+            }
         };
 
         handler.postDelayed(runnable, 1000);
+    }
+
+    private void sendNotification(LocationEvent event) {
+        Notification notification = createNotification(event);
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(count++, notification);
+
+    }
+
+    private Notification createNotification(LocationEvent event) {
+        int icon = R.drawable.stat_notify_chat;
+        long when = System.currentTimeMillis();
+
+        Notification notification = new Notification(icon, event.getTitle(), when);
+
+        Context context = getApplicationContext();
+        Intent notificationIntent = new Intent(context, ThoughtSquareActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+        notification.setLatestEventInfo(context, event.getTitle(), event.getMessage(), contentIntent);
+
+        return notification;
     }
 }
 
