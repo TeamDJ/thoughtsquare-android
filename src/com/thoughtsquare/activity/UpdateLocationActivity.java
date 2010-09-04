@@ -22,13 +22,11 @@ public class UpdateLocationActivity extends ListActivity {
 
     private List<Location> locations;
 
-    public UpdateLocationActivity() {
-        locations = new LocationService(this).getLocations();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        locations = new LocationService(this).getLocations();
         setContentView(R.layout.update_location);
 
         setListAdapter(new LocationAdapter());
