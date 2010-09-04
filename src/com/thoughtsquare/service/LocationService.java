@@ -22,11 +22,6 @@ public class LocationService {
     private Config config;
     private AHTTPClient httpClient;
 
-    public LocationService(Context context) {
-        this.httpClient = new AHTTPClient();
-        this.config = new ConfigLoader().getConfig(context);
-    }
-
     public LocationService(Config config, AHTTPClient httpClient) {
         this.config = config;
         this.httpClient = httpClient;

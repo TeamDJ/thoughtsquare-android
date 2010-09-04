@@ -14,6 +14,8 @@ import com.thoughtsquare.R;
 import com.thoughtsquare.domain.AddLocation;
 import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.service.LocationService;
+import com.thoughtsquare.utility.AHTTPClient;
+import com.thoughtsquare.utility.ConfigLoader;
 
 import java.util.List;
 
@@ -26,9 +28,11 @@ public class UpdateLocationActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        locations = new LocationService(this).getLocations();
-        setContentView(R.layout.update_location);
 
+        LocationService locationService = new LocationService( new ConfigLoader().getConfig(this), new AHTTPClient());
+        locations = locationService.getLocations();
+
+        setContentView(R.layout.update_location);
         setListAdapter(new LocationAdapter());
     }
 
@@ -69,7 +73,7 @@ public class UpdateLocationActivity extends ListActivity {
 
     class LocationAdapter extends ArrayAdapter<Location> {
         LocationAdapter() {
-            super(UpdateLocationActivity.this, android.R.layout.simple_list_item_1, locations);
+            super(UpdateLocationActivity.this, android.R.layout.simple_list_item_1, UpdateLocationActivity.this.locations);
         }
 
         @Override

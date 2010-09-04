@@ -10,6 +10,9 @@ import android.widget.EditText;
 import com.thoughtsquare.R;
 import com.thoughtsquare.async.AddLocationTask;
 import com.thoughtsquare.domain.Location;
+import com.thoughtsquare.service.LocationService;
+import com.thoughtsquare.utility.AHTTPClient;
+import com.thoughtsquare.utility.ConfigLoader;
 
 import java.util.concurrent.ExecutionException;
 
@@ -23,7 +26,8 @@ public class AddLocationActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_location);
 
-        addLocationTask = new AddLocationTask(this);
+        LocationService locationService = new LocationService( new ConfigLoader().getConfig(this), new AHTTPClient());
+        addLocationTask = new AddLocationTask(this,locationService);
 
         Button addLocation = (Button) findViewById(R.id.addLocation);
 

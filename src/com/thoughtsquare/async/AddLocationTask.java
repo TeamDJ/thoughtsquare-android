@@ -11,9 +11,9 @@ public class AddLocationTask extends AsyncTask<Location, Void, Location> {
     private LocationService service;
     private ProgressDialog spinner;
 
-    public AddLocationTask(AddLocationActivity activity) {
+    public AddLocationTask(AddLocationActivity activity, LocationService service) {
         this.activity = activity;
-        service = new LocationService(activity);
+        this.service = service;
 
         spinner = new ProgressDialog(activity);
         spinner.setMessage("Adding location...");
