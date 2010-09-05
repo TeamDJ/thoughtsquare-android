@@ -36,7 +36,13 @@
             <echo>${test.out}</echo>
             <fail>
                 <condition>
-                    <contains string="${test.out}" substring="FAILURES!!!"/>
+                    <or>
+                        <not>
+                            <contains string="${test.out}" substring="OK"/>
+                        </not>
+                         <contains string="${test.out}" substring="FAILURES!!!"/>
+                    </or>
+
                 </condition>
             </fail>
         </sequential>
