@@ -18,7 +18,12 @@ public class EventService {
     public List<LocationEvent> getEvents(){
         //TODO do a get events only since last time
         AHTTPResponse response = httpClient.get(config.getServerBaseURL() + "/events.json");
-        return buildEvents(response.getResponseBody());
+
+        if(response.getResponseStatus() == 200){
+            return buildEvents(response.getResponseBody());
+        }
+
+        return new ArrayList<LocationEvent>();
     }
 
     private List<LocationEvent> buildEvents(String eventsJson) {

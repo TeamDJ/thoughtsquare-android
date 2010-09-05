@@ -4,12 +4,15 @@ import com.thoughtsquare.domain.LocationEvent;
 import com.thoughtsquare.utility.AHTTPClient;
 import com.thoughtsquare.utility.AHTTPResponse;
 import com.thoughtsquare.utility.Config;
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -51,14 +54,19 @@ public class EventServiceTest {
 
     @Test
     public void shouldReturnEmptyListIfResponseIsNotOk(){
-
-
+        when(response.getResponseStatus()).thenReturn(500);
+        
+        assertThat(eventService.getEvents().size(), is(0));
     }
 
 
     @Test
-    public void shouldReturnEmptyListIfResponseBodyIsPoo(){
-            
+    public void shouldReturnEmptyListIfServerReturnsNoEvents(){
+        String feed = "[]";
 
+        when(response.getResponseStatus()).thenReturn(200);
+        when(response.getResponseBody()).thenReturn(feed);
+        List<LocationEvent> events = eventService.getEvents();
+        assertThat(events.size(), is(0));
     }
 }
