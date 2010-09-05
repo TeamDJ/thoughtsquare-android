@@ -9,15 +9,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
-import android.util.Log;
 import com.thoughtsquare.activity.ThoughtSquareActivity;
 import com.thoughtsquare.domain.LocationEvent;
 import com.thoughtsquare.utility.AHTTPClient;
 import com.thoughtsquare.utility.Config;
 import com.thoughtsquare.utility.ConfigLoader;
 import com.thoughtsquare.utility.RepeatableTask;
-
-import java.util.List;
 
 public class NotificationService extends Service {
 
@@ -39,7 +36,7 @@ public class NotificationService extends Service {
         super.onCreate();
 
         Config config = new ConfigLoader().getConfig(getApplicationContext());
-        long delay = 5000;
+        long delay = config.getEventsPollTime();
         EventService eventService = new EventService(new EventParser(), new AHTTPClient(), config);
         RepeatableTask task = new RepeatableTask(handler, new EventNotifyTask(this, eventService, delay), delay);
         handler.postDelayed(task, 1000);

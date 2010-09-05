@@ -18,5 +18,8 @@ public class Config {
     public String getServerBaseURL(){
         return properties.getProperty("server.base.url");
     }
-    
+
+    public long getEventsPollTime() {
+        return Long.parseLong(properties.getProperty("events.poll.time"));
+    }
 }
