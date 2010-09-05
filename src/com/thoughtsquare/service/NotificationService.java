@@ -39,8 +39,8 @@ public class NotificationService extends Service {
         super.onCreate();
 
         Config config = new ConfigLoader().getConfig(getApplicationContext());
-        EventService eventService = new EventService(new AHTTPClient(), config);
-        RepeatableTask task = new RepeatableTask(handler, new EventNotifyTask(this, eventService), 30000);
+        EventService eventService = new EventService(new EventParser(), new AHTTPClient(), config);
+        RepeatableTask task = new RepeatableTask(handler, new EventNotifyTask(this, eventService), 5000);
         handler.postDelayed(task, 1000);
     }
 

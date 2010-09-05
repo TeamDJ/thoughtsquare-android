@@ -1,55 +1,50 @@
 package com.thoughtsquare.service;
 
-import com.thoughtsquare.domain.LocationEvent;
 import com.thoughtsquare.utility.AHTTPClient;
 import com.thoughtsquare.utility.AHTTPResponse;
 import com.thoughtsquare.utility.Config;
-import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.*;
 
 public class EventServiceTest {
     private static final String BASEURL = "baseurl";
     private EventService eventService;
     private AHTTPClient httpClient;
     private AHTTPResponse response;
+    private EventParser eventParser;
 
     @Before
     public void setup(){
         httpClient = mock(AHTTPClient.class);
         Config config = mock(Config.class);
-        eventService = new EventService(httpClient, config);
+        eventParser = mock(EventParser.class);
+        response = mock(AHTTPResponse.class);
 
         when(config.getServerBaseURL()).thenReturn(BASEURL);
-        response = mock(AHTTPResponse.class);
-        when(httpClient.get(BASEURL + "/events.json")).thenReturn(response);
+        when(httpClient.get(anyString())).thenReturn(response);
+
+        eventService = new EventService(eventParser, httpClient, config);
     }
 
     @Test
     public void shouldGetListOfEventsFromServer(){
-        String feed = "[" +
-                "{\"title\" = \"smurf arrives\", \"message\" = \"jbomb is on the scene\"}," +
-                "{\"title\" = \"smurf leaves\", \"message\" = \"jbomb is no longer on the scene\"}" +
-                "]";
-
+        String json = "some json";
         when(response.getResponseStatus()).thenReturn(200);
-        when(response.getResponseBody()).thenReturn(feed);
-        List<LocationEvent> events = eventService.getEvents();
-        assertThat(events.size(), is(2));
-        assertThat(events.get(0).getTitle(), is("smurf arrives"));
-        assertThat(events.get(0).getMessage(), is("jbomb is on the scene"));
-        assertThat(events.get(1).getTitle(), is("smurf leaves"));
-        assertThat(events.get(1).getMessage(), is("jbomb is no longer on the scene"));
+        when(response.getResponseBody()).thenReturn(json);
+        List events = mock(List.class);
+        when(eventParser.parseEvents(json)).thenReturn(events);
 
+        assertThat(eventService.getEvents(), is(events));
+
+        verify(eventParser).parseEvents(json);
+        verify(httpClient).get(BASEURL + "/events.json");
     }
 
     @Test
@@ -60,13 +55,5 @@ public class EventServiceTest {
     }
 
 
-    @Test
-    public void shouldReturnEmptyListIfServerReturnsNoEvents(){
-        String feed = "[]";
-
-        when(response.getResponseStatus()).thenReturn(200);
-        when(response.getResponseBody()).thenReturn(feed);
-        List<LocationEvent> events = eventService.getEvents();
-        assertThat(events.size(), is(0));
-    }
+    
 }
