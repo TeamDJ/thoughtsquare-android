@@ -9,7 +9,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import com.thoughtsquare.R;
 import com.thoughtsquare.async.UpdateLocationTask;
 import com.thoughtsquare.criteria.LocationManagerProviderCriteria;
@@ -20,16 +19,14 @@ import com.thoughtsquare.intent.LocationUpdateReceiver;
 import com.thoughtsquare.intent.OnLocationUpdate;
 import com.thoughtsquare.service.LocationService;
 import com.thoughtsquare.service.NotificationService;
-import com.thoughtsquare.utility.AHTTPClient;
-import com.thoughtsquare.utility.Config;
-import com.thoughtsquare.utility.ConfigLoader;
-import com.thoughtsquare.utility.IntentBuilder;
+import com.thoughtsquare.utility.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 import static com.thoughtsquare.intent.IntentActions.LOCATION_UPDATED;
+import static com.thoughtsquare.utility.ViewUtils.setLabel;
 
 public class ThoughtSquareActivity extends Activity implements OnLocationUpdate {
     private static final int REGISTER_ACTIVITY = 0;
@@ -123,14 +120,11 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
     }
 
     private void greetUser(String displayName) {
-
-        TextView textView = (TextView) findViewById(R.id.welcome_label);
-        textView.setText("Hello " + displayName);
+        setLabel(this, R.id.welcome_label, "Hello " + displayName);
     }
 
     private void showLocation(Location location) {
-        TextView currentLocation = (TextView) findViewById(R.id.current_location);
-        currentLocation.setText(location.getTitle());
+        setLabel(this, R.id.current_location, location.getTitle());
     }
 
 

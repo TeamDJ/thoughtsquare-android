@@ -9,7 +9,6 @@ import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import com.thoughtsquare.R;
 import com.thoughtsquare.async.RegisterUserTask;
 import com.thoughtsquare.domain.User;
@@ -21,6 +20,8 @@ import com.thoughtsquare.utility.ConfigLoader;
 import java.util.concurrent.ExecutionException;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
+import static com.thoughtsquare.utility.ViewUtils.getTextFromTextBox;
+import static com.thoughtsquare.utility.ViewUtils.setTextInTextBox;
 
 public class RegisterActivity extends Activity {
     private AsyncTask<User, Void, Boolean> registerUserTask;
@@ -28,9 +29,7 @@ public class RegisterActivity extends Activity {
     private String emailAddress;
     private UserProvider userProvider;
 
-    /**
-     * Called when the activity is first created.
-     */
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +48,7 @@ public class RegisterActivity extends Activity {
         String mobileNumber = telephonyManager.getLine1Number();
 
         if(mobileNumber!=null){
-           setText(R.id.mobileNumber, mobileNumber);
+           setTextInTextBox(this, R.id.mobileNumber, mobileNumber);
         }
     }                       
 
@@ -58,8 +57,8 @@ public class RegisterActivity extends Activity {
         registerButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                displayName = getTextFromTextBox(R.id.displayName);
-                emailAddress = getTextFromTextBox(R.id.emailAddress);
+                displayName = getTextFromTextBox(RegisterActivity.this, R.id.displayName);
+                emailAddress = getTextFromTextBox(RegisterActivity.this, R.id.emailAddress);
 
                 final User user = userProvider.createUser(emailAddress, displayName);
 
@@ -101,13 +100,7 @@ public class RegisterActivity extends Activity {
         return super.onKeyDown(keyCode, event);    //To change body of overridden methods use File | Settings | File Templates.
     }
 
-    private String getTextFromTextBox(int viewId) {
-        return ((EditText) findViewById(viewId)).getText().toString();
-    }
 
-    private void setText(int viewId, String text) {
-        ((EditText) findViewById(viewId)).setText(text);
-    }
 
   
 }
