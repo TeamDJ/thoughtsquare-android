@@ -39,6 +39,10 @@ public class AHTTPClient {
         return getResponse(httpClient, post);
     }
 
+    public AHTTPResponse get(String url) {
+        return null;  //To change body of created methods use File | Settings | File Templates.
+    }
+
     public AHTTPResponse put(String url, Map<String, String> putParams) {
         HttpClient httpClient = new DefaultHttpClient();
         HttpPut put = new HttpPut(url);

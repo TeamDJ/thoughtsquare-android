@@ -12,6 +12,9 @@ import android.os.IBinder;
 import android.util.Log;
 import com.thoughtsquare.activity.ThoughtSquareActivity;
 import com.thoughtsquare.domain.LocationEvent;
+import com.thoughtsquare.utility.AHTTPClient;
+import com.thoughtsquare.utility.Config;
+import com.thoughtsquare.utility.ConfigLoader;
 import com.thoughtsquare.utility.RepeatableTask;
 
 import java.util.List;
@@ -35,8 +38,10 @@ public class NotificationService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        RepeatableTask task = new RepeatableTask(handler, new EventNotifyTask(this, new EventService()), 30000);
-        handler.postDelayed(task, 1000);
+        Config config = new ConfigLoader().getConfig(getApplicationContext());
+        EventService eventService = new EventService(new AHTTPClient(), config);
+        RepeatableTask task = new RepeatableTask(handler, new EventNotifyTask(this, eventService), 30000);
+        //handler.postDelayed(task, 1000);
     }
 
     public void sendNotification(LocationEvent event) {

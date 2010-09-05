@@ -3,7 +3,7 @@ package com.thoughtsquare.utility;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-public class JSONObject extends org.json.JSONObject{
+public class JSONObject{
     private org.json.JSONObject jsonObject;
 
     public JSONObject(org.json.JSONObject jsonObject) {
