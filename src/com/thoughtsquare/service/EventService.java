@@ -2,9 +2,9 @@ package com.thoughtsquare.service;
 
 import com.thoughtsquare.domain.LocationEvent;
 import com.thoughtsquare.utility.*;
-import org.joda.time.LocalDateTime;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class EventService {
@@ -18,12 +18,12 @@ public class EventService {
         this.config = config;
     }
 
-    public List<LocationEvent> getEvents(){
+    public List<LocationEvent> getEvents(Date since){
         //TODO do a get events only since last time
         AHTTPResponse response = httpClient.get(config.getServerBaseURL() + "/events.json");
 
         if(response.getResponseStatus() == 200){
-            return eventParser.parseEvents(response.getResponseBody());
+            return eventParser.parseEvents(response.getResponseBody(), since);
         }
 
         return new ArrayList<LocationEvent>();

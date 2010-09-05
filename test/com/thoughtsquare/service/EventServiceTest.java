@@ -3,9 +3,11 @@ package com.thoughtsquare.service;
 import com.thoughtsquare.utility.AHTTPClient;
 import com.thoughtsquare.utility.AHTTPResponse;
 import com.thoughtsquare.utility.Config;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Date;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -39,11 +41,12 @@ public class EventServiceTest {
         when(response.getResponseStatus()).thenReturn(200);
         when(response.getResponseBody()).thenReturn(json);
         List events = mock(List.class);
-        when(eventParser.parseEvents(json)).thenReturn(events);
+        when(eventParser.parseEvents(anyString(), any(Date.class))).thenReturn(events);
 
-        assertThat(eventService.getEvents(), is(events));
+        Date date = new Date();
+        assertThat(eventService.getEvents(date), is(events));
 
-        verify(eventParser).parseEvents(json);
+        verify(eventParser).parseEvents(json, date);
         verify(httpClient).get(BASEURL + "/events.json");
     }
 
@@ -51,7 +54,7 @@ public class EventServiceTest {
     public void shouldReturnEmptyListIfResponseIsNotOk(){
         when(response.getResponseStatus()).thenReturn(500);
         
-        assertThat(eventService.getEvents().size(), is(0));
+        assertThat(eventService.getEvents(new Date()).size(), is(0));
     }
 
 
