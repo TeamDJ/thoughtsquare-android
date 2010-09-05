@@ -7,6 +7,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -40,7 +41,10 @@ public class AHTTPClient {
     }
 
     public AHTTPResponse get(String url) {
-        return null;  //To change body of created methods use File | Settings | File Templates.
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpGet get = new HttpGet(url);
+
+         return getResponse(httpClient, get);
     }
 
     public AHTTPResponse put(String url, Map<String, String> putParams) {

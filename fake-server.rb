@@ -15,3 +15,7 @@ post '/users.json' do
    "}"
 end
 
+get '/events.json' do
+    '[{"title": "new smurf on your turf", "message":"papa smurf arrived in brisbane" }]'
+end
+

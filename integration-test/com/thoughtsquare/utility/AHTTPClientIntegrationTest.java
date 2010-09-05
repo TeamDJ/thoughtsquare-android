@@ -65,5 +65,12 @@ public class AHTTPClientIntegrationTest {
         assertThat(response.getResponseStatus(), is(HttpStatus.SC_CREATED));
     }
 
+    @Test
+    public void shouldGetSuccessfully(){
+        AHTTPResponse response = ahttpClient.get("http://localhost:2010/events.json");
+        assertThat(response.getResponseStatus(), is(200));
+        assertThat(response.getResponseBody(), is("[{\"title\": \"new smurf on your turf\", \"message\":\"papa smurf arrived in brisbane\" }]"));
+    }
+
     //TODO: Clean up created user after test.
 }

@@ -41,7 +41,7 @@ public class NotificationService extends Service {
         Config config = new ConfigLoader().getConfig(getApplicationContext());
         EventService eventService = new EventService(new AHTTPClient(), config);
         RepeatableTask task = new RepeatableTask(handler, new EventNotifyTask(this, eventService), 30000);
-        //handler.postDelayed(task, 1000);
+        handler.postDelayed(task, 1000);
     }
 
     public void sendNotification(LocationEvent event) {
