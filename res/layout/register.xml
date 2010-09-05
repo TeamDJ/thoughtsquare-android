@@ -19,6 +19,12 @@
               android:hint="Email address"
               android:inputType="textEmailAddress"
             />
+    <EditText android:id="@+id/mobileNumber"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:singleLine="true"
+              android:hint="Mobile number"
+            />
 
     <Button android:id="@+id/registerButton"
             android:text="@string/register"

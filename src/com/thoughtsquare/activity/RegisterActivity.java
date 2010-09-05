@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +26,7 @@ public class RegisterActivity extends Activity {
     private AsyncTask<User, Void, Boolean> registerUserTask;
     private String displayName;
     private String emailAddress;
+    private UserProvider userProvider;
 
     /**
      * Called when the activity is first created.
@@ -35,8 +37,23 @@ public class RegisterActivity extends Activity {
         setContentView(R.layout.register);
 
         final Config config = new ConfigLoader().getConfig(this);
-        final UserProvider userProvider = new UserProvider(getDefaultSharedPreferences(this), new AHTTPClient(), config);
+        userProvider = new UserProvider(getDefaultSharedPreferences(this), new AHTTPClient(), config);
 
+        populateMobileNumber();
+
+        setupRegisterButton();
+    }
+
+    private void populateMobileNumber() {
+        TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+        String mobileNumber = telephonyManager.getLine1Number();
+
+        if(mobileNumber!=null){
+           setText(R.id.mobileNumber, mobileNumber);
+        }
+    }                       
+
+    private void setupRegisterButton() {
         Button registerButton = (Button) findViewById(R.id.registerButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
 
@@ -88,7 +105,9 @@ public class RegisterActivity extends Activity {
         return ((EditText) findViewById(viewId)).getText().toString();
     }
 
-    private Context getContext() {
-        return this;
+    private void setText(int viewId, String text) {
+        ((EditText) findViewById(viewId)).setText(text);
     }
+
+  
 }
