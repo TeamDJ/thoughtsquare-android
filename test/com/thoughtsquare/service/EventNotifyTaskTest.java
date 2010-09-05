@@ -1,7 +1,6 @@
 package com.thoughtsquare.service;
 
 import com.thoughtsquare.domain.LocationEvent;
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,7 +27,7 @@ public class EventNotifyTaskTest {
     public void shouldCreateANotificationForEachLocationEvent() {
         LocationEvent event1 = new LocationEvent("hello rudy", "a message for you");
         LocationEvent event2 = new LocationEvent("hello rudy", "another message for you");
-        when(eventService.getEvents(any(Date.class))).thenReturn(asList(event1, event2));
+        when(eventService.getEventsSince(any(Date.class))).thenReturn(asList(event1, event2));
 
         task.run();
 
@@ -38,7 +37,7 @@ public class EventNotifyTaskTest {
 
     @Test
     public void shouldNotBarfWhenThereAreNoEvents(){
-       when(eventService.getEvents(any(Date.class))).thenReturn(new ArrayList<LocationEvent>());
+       when(eventService.getEventsSince(any(Date.class))).thenReturn(new ArrayList<LocationEvent>());
 
         task.run();
 

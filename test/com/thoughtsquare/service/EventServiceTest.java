@@ -3,7 +3,6 @@ package com.thoughtsquare.service;
 import com.thoughtsquare.utility.AHTTPClient;
 import com.thoughtsquare.utility.AHTTPResponse;
 import com.thoughtsquare.utility.Config;
-import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -44,7 +43,7 @@ public class EventServiceTest {
         when(eventParser.parseEvents(anyString(), any(Date.class))).thenReturn(events);
 
         Date date = new Date();
-        assertThat(eventService.getEvents(date), is(events));
+        assertThat(eventService.getEventsSince(date), is(events));
 
         verify(eventParser).parseEvents(json, date);
         verify(httpClient).get(BASEURL + "/events.json");
@@ -54,7 +53,7 @@ public class EventServiceTest {
     public void shouldReturnEmptyListIfResponseIsNotOk(){
         when(response.getResponseStatus()).thenReturn(500);
         
-        assertThat(eventService.getEvents(new Date()).size(), is(0));
+        assertThat(eventService.getEventsSince(new Date()).size(), is(0));
     }
 
 

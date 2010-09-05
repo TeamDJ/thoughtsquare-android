@@ -15,7 +15,7 @@ public class EventNotifyTask implements Runnable {
     }
 
     public void run() {
-        List<LocationEvent> events = eventService.getEvents(new Date(0));
+        List<LocationEvent> events = eventService.getEventsSince(new Date(0));
 
         for (LocationEvent event : events) {
             notificationService.sendNotification(event);

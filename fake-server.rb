@@ -16,6 +16,6 @@ post '/users.json' do
 end
 
 get '/events.json' do
-    '[{"title": "new smurf on your turf", "message":"papa smurf arrived in brisbane" }]'
+    '[{"event":{"description":"MyString has arrived in three","title":"new smurf on your turf","user_id":298486374,"location_id":113629430,"when":"2010-09-05T08:12:12Z","event_type":"arrive"}}]'
 end
 

@@ -18,7 +18,7 @@ public class EventService {
         this.config = config;
     }
 
-    public List<LocationEvent> getEvents(Date since){
+    public List<LocationEvent> getEventsSince(Date since){
         //TODO do a get events only since last time
         AHTTPResponse response = httpClient.get(config.getServerBaseURL() + "/events.json");
 
