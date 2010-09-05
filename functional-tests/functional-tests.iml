@@ -20,10 +20,11 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/test-libs/robotium-solo-1.6.0.jar!/" />
+          <root url="file://$MODULE_DIR$/test-libs" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
+        <jarDirectory url="file://$MODULE_DIR$/test-libs" recursive="false" />
       </library>
     </orderEntry>
     <orderEntry type="library" scope="PROVIDED" name="Android 2.2 Platform" level="application" />

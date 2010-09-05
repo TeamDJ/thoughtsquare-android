@@ -12,13 +12,19 @@ import android.os.IBinder;
 import android.util.Log;
 import com.thoughtsquare.activity.ThoughtSquareActivity;
 import com.thoughtsquare.domain.LocationEvent;
+import com.thoughtsquare.utility.RepeatableTask;
 
 import java.util.List;
 
 public class NotificationService extends Service {
 
-    private Handler handler = new Handler();
-    private static int count = 1;
+    private Handler handler;
+    private static final int LOCATION_EVENT = 1;
+
+    public NotificationService(){
+        this.handler = new Handler();
+    }
+
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -29,28 +35,15 @@ public class NotificationService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        Runnable runnable = new Runnable() {
-
-            public void run() {
-
-                EventService eventService = new EventService();
-                List<LocationEvent> events = eventService.getEvents();
-
-                for (LocationEvent event : events) {
-                    sendNotification(event);
-                }
-                handler.postDelayed(this, 30000);
-            }
-        };
-
-        handler.postDelayed(runnable, 1000);
+        RepeatableTask task = new RepeatableTask(handler, new EventNotifyTask(this, new EventService()), 30000);
+        handler.postDelayed(task, 1000);
     }
 
-    private void sendNotification(LocationEvent event) {
+    public void sendNotification(LocationEvent event) {
         Notification notification = createNotification(event);
 
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(count++, notification);
+        mNotificationManager.notify(LOCATION_EVENT, notification);
 
     }
 
@@ -60,12 +53,16 @@ public class NotificationService extends Service {
 
         Notification notification = new Notification(icon, event.getTitle(), when);
 
-        Context context = getApplicationContext();
-        Intent notificationIntent = new Intent(context, ThoughtSquareActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
-        notification.setLatestEventInfo(context, event.getTitle(), event.getMessage(), contentIntent);
+        Intent notificationIntent = new Intent(this, ThoughtSquareActivity.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        notification.setLatestEventInfo(this, event.getTitle(), event.getMessage(), contentIntent);
 
         return notification;
+    }
+
+    public void setHandler(Handler handler) {
+        //grr setter-injection! needed to be able to test this class at all
+        this.handler = handler;
     }
 }
 
