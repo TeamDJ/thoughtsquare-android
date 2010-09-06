@@ -21,4 +21,8 @@ public class AHTTPResponse {
     public JSONObject getJSONResponse() {
         return new JSONObject(responseBody);
     }
+
+    public JSONArray getJSONArray() {
+        return new JSONArray(responseBody);
+    }
 }
