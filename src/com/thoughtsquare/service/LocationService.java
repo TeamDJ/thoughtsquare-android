@@ -4,10 +4,7 @@ import android.content.Context;
 import com.thoughtsquare.db.LocationProvider;
 import com.thoughtsquare.domain.AddLocation;
 import com.thoughtsquare.domain.Location;
-import com.thoughtsquare.utility.AHTTPClient;
-import com.thoughtsquare.utility.AHTTPResponse;
-import com.thoughtsquare.utility.Config;
-import com.thoughtsquare.utility.ConfigLoader;
+import com.thoughtsquare.utility.*;
 import org.apache.http.HttpStatus;
 
 import java.util.ArrayList;
@@ -69,5 +66,18 @@ public class LocationService {
             return location;
         }
         return null;
+    }
+
+    public List<Location> getRemoteLocations() {
+        AHTTPResponse response = httpClient.get(config.getServerBaseURL() + "/locations.json");
+        List<JSONObject> jsonObjects = response.getJSONArray().getJSONObjects();
+        List<Location> locations = new ArrayList<Location>();
+
+        for (JSONObject jsonObject : jsonObjects) {
+            Location location = new Location(jsonObject);
+            locations.add(location);
+        }
+
+        return locations;
     }
 }
