@@ -26,5 +26,9 @@ public class DbProvider<T extends Serializable> extends Db4oHelper {
     public List<T> findAll() {
         return db().query(clazz);
     }
+
+    public T get(T obj) {
+        return (T) db().queryByExample(obj).next();
+    }
 }
 
