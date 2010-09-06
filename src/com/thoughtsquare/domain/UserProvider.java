@@ -7,6 +7,7 @@ import com.thoughtsquare.utility.Config;
 public class UserProvider {
     private static final String USER_DISPLAY_NAME = "user.displayName";
     private static final String USER_EMAIL = "user.email";
+    private static final String USER_MOBILE_NUMBER = "user.mobileNumber";
     private static final String USER_ID = "user.id";
 
     private SharedPreferences preferences;
@@ -25,7 +26,7 @@ public class UserProvider {
     }
 
     public User createUser(String email, String display) {
-        return new User(this, client, config, null, email, display, null);
+        return new User(this, client, config, null, email, display, null, null);
     }
 
 
@@ -33,6 +34,7 @@ public class UserProvider {
         preferences.edit()
                 .putString(USER_DISPLAY_NAME, user.getDisplayName())
                 .putString(USER_EMAIL, user.getEmail())
+                .putString(USER_MOBILE_NUMBER, user.getMobileNumber())
                 .putInt(USER_ID, user.getId())
                 .commit();
 
@@ -69,6 +71,7 @@ public class UserProvider {
         return new User(this, client, config, preferences.getInt(USER_ID, -1),
                 preferences.getString(USER_EMAIL, ""),
                 preferences.getString(USER_DISPLAY_NAME, ""),
+                preferences.getString(USER_MOBILE_NUMBER, ""),
                 currentLocation);
     }
 

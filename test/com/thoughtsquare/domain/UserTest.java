@@ -39,6 +39,7 @@ public class UserTest {
     private UserProvider userProvider;
     private static final int NEW_LOCATION_ID = 1;
     private Config config;
+    private static final String MOBILE_NUMBER = "0421222333";
 
     @Before
     public void setup() {
@@ -54,7 +55,7 @@ public class UserTest {
         when(client.put(anyString(), anyMap())).thenReturn(response);
         when(response.getJSONResponse()).thenReturn(jsonResponse);
 
-        user = new User(userProvider, client, config, null, MY_EMAIL, MY_DISPLAY, null);
+        user = new User(userProvider, client, config, null, MY_EMAIL, MY_DISPLAY, MOBILE_NUMBER, null);
     }
 
     @Test
@@ -81,7 +82,7 @@ public class UserTest {
 
     @Test
     public void shouldUpdateLocationSuccessfully() {
-        User user = new User(userProvider, client, config, 5, MY_EMAIL, MY_DISPLAY, null);
+        User user = new User(userProvider, client, config, 5, MY_EMAIL, MY_DISPLAY,MOBILE_NUMBER, null);
 
         Location newLocation = mock(Location.class);
 
@@ -99,7 +100,7 @@ public class UserTest {
 
     @Test
     public void shouldSaveLocationEvenIfHttpPutFails(){
-        User user = new User(userProvider, client, config, 5, MY_EMAIL, MY_DISPLAY, null);
+        User user = new User(userProvider, client, config, 5, MY_EMAIL, MY_DISPLAY, MOBILE_NUMBER, null);
 
         Location newLocation = mock(Location.class);
 
@@ -115,6 +116,7 @@ public class UserTest {
         Map<String, String> postParams = new HashMap<String, String>();
         postParams.put("user[display_name]", MY_DISPLAY);
         postParams.put("user[email]", MY_EMAIL);
+        postParams.put("user[mobile_number]", MOBILE_NUMBER);
         return postParams;
     }
 
@@ -122,6 +124,7 @@ public class UserTest {
         Map<String, String> postParams = new HashMap<String, String>();
         postParams.put("user[display_name]", MY_DISPLAY);
         postParams.put("user[email]", MY_EMAIL);
+        postParams.put("user[mobile_number]", MOBILE_NUMBER);
         postParams.put("user[current_location_id]", valueOf(NEW_LOCATION_ID));
         return postParams;
     }

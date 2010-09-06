@@ -18,19 +18,23 @@ public class User {
     private Config config;
     private String email;
     private String displayName;
+
+    private String mobileNumber;
+
     private Location currentLocation;
 
-
     public User(UserProvider userProvider, AHTTPClient client, Config config,
-                Integer id, String email, String displayName, Location currentLocation) {
+                Integer id, String email, String displayName, String mobileNumber, Location currentLocation) {
         this.userProvider = userProvider;
         this.client = client;
         this.config = config;
+        this.id = id;
         this.email = email;
         this.displayName = displayName;
-        this.id = id;
+        this.mobileNumber = mobileNumber;
         this.currentLocation = currentLocation;
     }
+
 
     public Integer getId() {
         return id;
@@ -44,16 +48,16 @@ public class User {
         return displayName;
     }
 
+    public String getMobileNumber() {
+        return mobileNumber;
+    }
+
     public Location getCurrentLocation() {
         return currentLocation;
     }
 
     public boolean register() {
-        Map<String, String> postParams = new HashMap<String, String>();
-        postParams.put("user[display_name]", displayName);
-        postParams.put("user[email]", email);
-
-        AHTTPResponse status = client.post(config.getServerBaseURL() + "/users.json", postParams);
+        AHTTPResponse status = client.post(config.getServerBaseURL() + "/users.json", createParams());
 
         if (status.getResponseStatus() == HttpStatus.SC_CREATED) {
             id = status.getJSONResponse().getJSONObject("user").getInt("id");
@@ -65,14 +69,10 @@ public class User {
     }
 
     public boolean updateLocation(Location newLocation) {
-        Map<String, String> putParams = new HashMap<String, String>();
-        putParams.put("user[display_name]", displayName);
-        putParams.put("user[email]", email);
-        putParams.put("user[current_location_id]", valueOf(newLocation.getId()));
-
-        AHTTPResponse status = client.put(config.getServerBaseURL() + "/users/" + id + ".json", putParams);
-
         this.currentLocation = newLocation;
+
+        AHTTPResponse status = client.put(config.getServerBaseURL() + "/users/" + id + ".json", createParams());
+
         userProvider.saveUser(this);
         if (status.getResponseStatus() == SC_OK) {
             return true;
@@ -81,8 +81,23 @@ public class User {
         return false;
     }
 
+    private Map<String, String> createParams() {
+        Map<String, String> putParams = new HashMap<String, String>();
+        putParams.put("user[display_name]", displayName);
+        putParams.put("user[email]", email);
+        putParams.put("user[mobile_number]", mobileNumber);
+
+        if(currentLocationIsKnown()){
+            putParams.put("user[current_location_id]", valueOf(currentLocation.getId()));
+        }
+
+        return putParams;
+    }
+
 
     public boolean currentLocationIsKnown() {
         return currentLocation != null;
     }
+
+
 }

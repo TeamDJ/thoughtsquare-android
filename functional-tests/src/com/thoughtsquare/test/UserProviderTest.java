@@ -17,13 +17,14 @@ public class UserProviderTest extends InstrumentationTestCase {
         Location location = new Location(2, "Brisbane", 32.5677878, -122.454643, 100);
 
 
-        User user = new User(userProvider, null, null, 5, "foo@bla.com", "bar", location);
+        User user = new User(userProvider, null, null, 5, "foo@bla.com", "bar", "0421333222", location);
 
         userProvider.saveUser(user);
 
         User savedUser = userProvider.getUser();
         assertEquals("foo@bla.com", savedUser.getEmail());
         assertEquals("bar", savedUser.getDisplayName());
+        assertEquals("0421333222", savedUser.getMobileNumber());
         assertEquals(5, savedUser.getId().intValue());
 
         Location savedLocation = savedUser.getCurrentLocation();
