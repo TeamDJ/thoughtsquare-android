@@ -60,6 +60,7 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
         }
 
         setupAutoLocationUpdater();
+        setupShoutButton();
 
         startService(new Intent(this, NotificationService.class));
     }
@@ -115,6 +116,16 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
             public void onClick(View view) {
                 Intent i = new Intent(ThoughtSquareActivity.this, UpdateLocationActivity.class);
                 startActivityForResult(i, UPDATE_LOCATION_ACTIVITY);
+            }
+        });
+    }
+
+    private void setupShoutButton() {
+        Button shoutButton = (Button) findViewById(R.id.shout);
+        shoutButton.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                startActivity(new Intent(ThoughtSquareActivity.this, ShoutActivity.class));
             }
         });
     }
