@@ -1,6 +1,6 @@
 package com.thoughtsquare.utility;
 
-import org.apache.http.HttpEntity;
+import org.apache.http.HttpEntityEnclosingRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -15,7 +15,8 @@ import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,58 +27,48 @@ public class AHTTPClient {
     public AHTTPClient() {
     }
 
-    public AHTTPResponse post(String url, Map<String, String> postParams) {
+    public AHTTPResponse post(String url, Map<String, String> params) {
         HttpClient httpClient = new DefaultHttpClient();
         HttpPost post = new HttpPost(url);
-
-        List<NameValuePair> params = getParams(postParams);
-        try {
-            post.setEntity(new UrlEncodedFormEntity(params));
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
-
+        setHeaders(post, params);
         return getResponse(httpClient, post);
+    }
+
+    public AHTTPResponse put(String url, Map<String, String> params) {
+        HttpClient httpClient = new DefaultHttpClient();
+        HttpPut put = new HttpPut(url);
+        setHeaders(put, params);
+        return getResponse(httpClient, put);
     }
 
     public AHTTPResponse get(String url) {
         HttpClient httpClient = new DefaultHttpClient();
         HttpGet get = new HttpGet(url);
-
-         return getResponse(httpClient, get);
+        return getResponse(httpClient, get);
     }
 
-    public AHTTPResponse put(String url, Map<String, String> putParams) {
-        HttpClient httpClient = new DefaultHttpClient();
-        HttpPut put = new HttpPut(url);
-
-        List<NameValuePair> params = getParams(putParams);
+    private void setHeaders(HttpEntityEnclosingRequest method, Map<String, String> params) {
         try {
-            put.setEntity(new UrlEncodedFormEntity(params));
+            method.setEntity(new UrlEncodedFormEntity(getParams(params)));
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
-
-
-        return getResponse(httpClient, put);
     }
 
-    private AHTTPResponse getResponse(HttpClient httpClient, HttpRequestBase request){
-
+    private AHTTPResponse getResponse(HttpClient httpClient, HttpRequestBase request) {
         try {
             return httpClient.execute(request, new AHTTPResponseHandler());
         } catch (IOException e) {
             throw new RuntimeException("Error during http request", e);
-        }
-        finally{
+        } finally {
             httpClient.getConnectionManager().shutdown();
         }
     }
 
-    private List<NameValuePair> getParams(Map<String, String> postParams) {
+    private List<NameValuePair> getParams(Map<String, String> params) {
         List<NameValuePair> list = new ArrayList<NameValuePair>();
 
-        for (Map.Entry<String, String> entry : postParams.entrySet()) {
+        for (Map.Entry<String, String> entry : params.entrySet()) {
             list.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
         }
 
@@ -85,14 +76,12 @@ public class AHTTPClient {
     }
 
     class AHTTPResponseHandler implements ResponseHandler<AHTTPResponse> {
-
-
-        public AHTTPResponse handleResponse(HttpResponse response) throws HttpResponseException, IOException {
+        public AHTTPResponse handleResponse(HttpResponse response) throws IOException {
             int responseStatus = response.getStatusLine().getStatusCode();
 
             String responseBody = null;
             try {
-                responseBody =  new BasicResponseHandler().handleResponse(response);
+                responseBody = new BasicResponseHandler().handleResponse(response);
             } catch (HttpResponseException e) {
                 //basic response handler throws this exception if resposne >= 300
                 //but we want to capture the status
@@ -100,6 +89,5 @@ public class AHTTPClient {
 
             return new AHTTPResponse(responseStatus, responseBody);
         }
-
     }
 }

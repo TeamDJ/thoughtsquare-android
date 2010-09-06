@@ -23,30 +23,19 @@ public class UpdateLocationActivity extends ListActivity {
     private static final int ADD_LOCATION_ACTIVITY = 0;
 
     private List<Location> locations;
-<<<<<<< HEAD
-
-=======
     private LocationService service;
     private LocationAdapter listAdapter;
->>>>>>> FINALLY! wired up locations through db4o provider and can now add locations successfully
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-<<<<<<< HEAD
-        LocationService locationService = new LocationService( new ConfigLoader().getConfig(this), new AHTTPClient());
-        locations = locationService.getLocations();
-
-        setContentView(R.layout.update_location);
-        setListAdapter(new LocationAdapter());
-=======
         service = new LocationService(this);
         locations = service.getLocations();
         listAdapter = new LocationAdapter();
 
+        setContentView(R.layout.update_location);
         setListAdapter(listAdapter);
->>>>>>> FINALLY! wired up locations through db4o provider and can now add locations successfully
     }
 
     @Override
