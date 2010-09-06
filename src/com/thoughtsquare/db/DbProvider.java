@@ -38,5 +38,11 @@ public class DbProvider<T extends Serializable> extends Db4oHelper {
     public boolean notExists(T obj) {
         return !exists(obj);
     }
+
+    public void storeIfNotExists(T obj) {
+        if (notExists(obj)) {
+            store(obj);
+        }
+    }
 }
 
