@@ -25,8 +25,8 @@ public class UserProvider {
         this.config = config;
     }
 
-    public User createUser(String email, String display) {
-        return new User(this, client, config, null, email, display, null, null);
+    public User createUser(String email, String display, String mobileNumber) {
+        return new User(this, client, config, null, email, display, mobileNumber, null);
     }
 
 

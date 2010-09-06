@@ -27,6 +27,7 @@ public class RegisterActivity extends Activity {
     private AsyncTask<User, Void, Boolean> registerUserTask;
     private String displayName;
     private String emailAddress;
+    private String mobileNumber;
     private UserProvider userProvider;
 
 
@@ -59,8 +60,9 @@ public class RegisterActivity extends Activity {
             public void onClick(View view) {
                 displayName = getTextFromTextBox(RegisterActivity.this, R.id.displayName);
                 emailAddress = getTextFromTextBox(RegisterActivity.this, R.id.emailAddress);
+                mobileNumber = getTextFromTextBox(RegisterActivity.this, R.id.mobileNumber);
 
-                final User user = userProvider.createUser(emailAddress, displayName);
+                final User user = userProvider.createUser(emailAddress, displayName, mobileNumber);
 
                 registerUserTask = new RegisterUserTask(RegisterActivity.this).execute(user);
             }
