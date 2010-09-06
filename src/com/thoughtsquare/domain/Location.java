@@ -2,6 +2,7 @@ package com.thoughtsquare.domain;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.thoughtsquare.utility.JSONObject;
 
 import java.io.Serializable;
 
@@ -22,6 +23,11 @@ public class Location implements Parcelable, Serializable {
 
     public Location(Parcel parcel) {
         this(parcel.readInt(), parcel.readString(), parcel.readDouble(), parcel.readDouble(), parcel.readFloat());
+    }
+
+    public Location(JSONObject jsonObject) {
+        this(jsonObject.getInt("id"), jsonObject.getString("title"), jsonObject.getDouble("latitude"),
+                jsonObject.getDouble("longitude"), 100000);
     }
 
     public int getId() {
