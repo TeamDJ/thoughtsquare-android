@@ -7,6 +7,8 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.apache.http.HttpStatus.SC_CREATED;
+import static org.apache.http.HttpStatus.SC_OK;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
@@ -26,9 +28,9 @@ public class AHTTPClientIntegrationTest {
         postParams.put("user[display_name]", "foo");
         postParams.put("user[email]", "foo@bar.com");
 
-        AHTTPResponse response = ahttpClient.post("http://localhost:2010/users.json", postParams);
+        AHTTPResponse response = ahttpClient.post("http://thoughtsquare.heroku.com/users.json", postParams);
 
-        assertThat(response.getResponseStatus(), is(HttpStatus.SC_CREATED));
+        assertThat(response.getResponseStatus(), is(SC_CREATED));
         assertTrue(response.getResponseBody().contains("foo"));
     }
 
@@ -36,21 +38,12 @@ public class AHTTPClientIntegrationTest {
     public void shouldBeAbleToDoSecondRequest() {
         Map<String, String> postParams = new HashMap<String, String>();
         postParams.put("user[display_name]", "foo");
-        postParams.put("user[email]", "foo@bar.com");
-        ahttpClient.post("http://localhost:2010/users.json", postParams);
-        ahttpClient.post("http://localhost:2010/users.json", postParams);
-    }
 
-    @Test
-    public void shouldPutSuccessfully() {
-        Map<String, String> params = new HashMap<String, String>();
-        params.put("user[display_name]", "James");
-        params.put("user[email]", "foo@bar.com");
-        params.put("user[current_location_id]", "2");
+        postParams.put("user[email]", "one@test.com");
+        ahttpClient.post("http://thoughtsquare.heroku.com/users.json", postParams);
 
-        AHTTPResponse response = ahttpClient.put("http://thoughtsquare.heroku.com/users/1.json", params);
-
-        assertThat(response.getResponseStatus(), is(HttpStatus.SC_OK));
+        postParams.put("user[email]", "two@test.com");
+        ahttpClient.post("http://thoughtsquare.heroku.com/users.json", postParams);
     }
 
     @Test
@@ -62,7 +55,26 @@ public class AHTTPClientIntegrationTest {
 
         AHTTPResponse response = ahttpClient.post("http://thoughtsquare.heroku.com/locations.json", params);
 
-        assertThat(response.getResponseStatus(), is(HttpStatus.SC_CREATED));
+        assertThat(response.getResponseStatus(), is(SC_CREATED));
+    }
+
+    @Test
+    public void shouldPutSuccessfully() {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("user[display_name]", "James");
+        params.put("user[email]", "foo@bar.com");
+        params.put("user[current_location_id]", "1");
+
+        AHTTPResponse response = ahttpClient.put("http://thoughtsquare.heroku.com/users/1.json", params);
+
+        assertThat(response.getResponseStatus(), is(SC_OK));
+    }
+
+    @Test
+    public void shouldGetLocations() {
+        AHTTPResponse response = ahttpClient.get("http://thoughtsquare.heroku.com/locations.json");
+
+        assertThat(response.getResponseStatus(), is (SC_OK));
     }
 
     //TODO: Clean up created user after test.
