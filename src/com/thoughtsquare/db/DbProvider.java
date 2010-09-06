@@ -30,5 +30,9 @@ public class DbProvider<T extends Serializable> extends Db4oHelper {
     public T get(T obj) {
         return (T) db().queryByExample(obj).next();
     }
+
+    public boolean exists(T obj) {
+        return get(obj) != null;
+    }
 }
 
