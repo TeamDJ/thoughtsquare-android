@@ -26,6 +26,7 @@ import java.util.Map;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 import static com.thoughtsquare.intent.IntentActions.LOCATION_UPDATED;
+import static com.thoughtsquare.utility.ViewUtils.getLabel;
 import static com.thoughtsquare.utility.ViewUtils.setLabel;
 
 public class ThoughtSquareActivity extends Activity implements OnLocationUpdate {
@@ -125,7 +126,11 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
         shoutButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                startActivity(new Intent(ThoughtSquareActivity.this, ShoutActivity.class));
+                String locationTitle = getLabel(ThoughtSquareActivity.this, R.id.current_location);
+
+                Intent intent = new Intent(ThoughtSquareActivity.this, ShoutActivity.class);
+                intent.putExtra("locationTitle", locationTitle);
+                startActivity(intent);
             }
         });
     }

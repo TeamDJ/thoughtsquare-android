@@ -3,6 +3,7 @@ package com.thoughtsquare.utility;
 import android.app.Activity;
 import android.widget.EditText;
 import android.widget.TextView;
+import com.thoughtsquare.activity.ThoughtSquareActivity;
 
 public class ViewUtils {
 
@@ -19,4 +20,7 @@ public class ViewUtils {
     }
 
 
+    public static String getLabel(Activity activity, int viewId) {
+        return ((TextView)activity.findViewById(viewId)).getText() + "";
+    }
 }

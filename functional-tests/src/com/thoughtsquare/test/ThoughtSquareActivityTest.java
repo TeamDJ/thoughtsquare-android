@@ -41,12 +41,16 @@ public class ThoughtSquareActivityTest extends ActivityInstrumentationTestCase2<
         assertEquals("Brisbane", getText(R.id.current_location));
 
         solo.clickOnButton("Shout!");
+
+        solo.waitForText("To:");
+        assertEquals("Brisbane", getText(R.id.shoutLocation));
         solo.enterText(0, "Eat this for lunch!");
         solo.clickOnButton("Shout!");
+
     }
 
     private String getText(int viewId) {
-        TextView textView = (TextView) activity.findViewById(viewId);
+        TextView textView = (TextView) solo.getCurrentActivity().findViewById(viewId);
         String text = textView.getText().toString();
         return text;
     }

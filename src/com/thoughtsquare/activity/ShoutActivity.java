@@ -8,6 +8,9 @@ import android.widget.Button;
 import com.thoughtsquare.R;
 import com.thoughtsquare.domain.User;
 import com.thoughtsquare.domain.UserProvider;
+import com.thoughtsquare.utility.ViewUtils;
+
+import static com.thoughtsquare.utility.ViewUtils.setLabel;
 
 public class ShoutActivity extends Activity {
 
@@ -15,6 +18,9 @@ public class ShoutActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shout);
+
+        String locationTitle = (String)getIntent().getExtras().get("locationTitle");
+        setLabel(this, R.id.shoutLocation, locationTitle);
 
         setupShoutButton();
     }
