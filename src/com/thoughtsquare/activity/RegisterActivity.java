@@ -10,14 +10,12 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import com.thoughtsquare.R;
-import com.thoughtsquare.async.RegisterUserTask;
+import com.thoughtsquare.async.WaitTask;
 import com.thoughtsquare.domain.User;
 import com.thoughtsquare.domain.UserProvider;
 import com.thoughtsquare.utility.AHTTPClient;
 import com.thoughtsquare.utility.Config;
 import com.thoughtsquare.utility.ConfigLoader;
-
-import java.util.concurrent.ExecutionException;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 import static com.thoughtsquare.utility.ViewUtils.getTextFromTextBox;
@@ -64,36 +62,37 @@ public class RegisterActivity extends Activity {
 
                 final User user = userProvider.createUser(emailAddress, displayName, mobileNumber);
 
-                registerUserTask = new RegisterUserTask(RegisterActivity.this).execute(user);
+
+                new WaitTask<Boolean>(RegisterActivity.this, "Registering..."){
+                    protected Boolean run() {
+                        return user.register();
+                    }
+
+                    protected void doAfter(Boolean registrationSuccessful) {
+                        if (registrationSuccessful){
+                            returnUserDetailsToCallingActivity();
+                        }
+                        //TODO display registration error to user
+                    }
+                }.execute();
             }
 
         });
     }
 
-    public void onFinishRegisterTask() {
-        boolean registerSuccess = false;
-        try {
-            registerSuccess = registerUserTask.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+    private void returnUserDetailsToCallingActivity() {
+        Bundle extras = new Bundle();
+        extras.putString("displayName", displayName);
+        extras.putString("emailAddress", emailAddress);
 
-        if (registerSuccess) {
-            Bundle extras = new Bundle();
-            extras.putString("displayName", displayName);
-            extras.putString("emailAddress", emailAddress);
-
-            Intent mIntent = new Intent();
-            mIntent.putExtras(extras);
-            setResult(RESULT_OK, mIntent);
-            finish();
-        }
-
-        //TODO: What to do when userService cannot register user?
+        Intent mIntent = new Intent();
+        mIntent.putExtras(extras);
+        setResult(RESULT_OK, mIntent);
+        finish();
     }
 
+
+    // Stop user from hitting back key - we want to force them to register
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
