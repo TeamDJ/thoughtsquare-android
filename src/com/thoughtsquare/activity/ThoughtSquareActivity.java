@@ -26,7 +26,6 @@ import java.util.Map;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 import static com.thoughtsquare.intent.IntentActions.LOCATION_UPDATED;
-import static com.thoughtsquare.utility.ViewUtils.getLabel;
 import static com.thoughtsquare.utility.ViewUtils.setLabel;
 
 public class ThoughtSquareActivity extends Activity implements OnLocationUpdate {
@@ -35,6 +34,7 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
     private UserProvider userProvider;
     private LocationService locationService;
     private LocationUpdateReceiver locationUpdateReceiver;
+    private Location currentLocation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
             User user = userProvider.getUser();
             greetUser(user.getDisplayName());
             if (user.currentLocationIsKnown()) {
-                showLocation(user.getCurrentLocation());
+                setCurrentLocation(user.getCurrentLocation());
             }
         } else {
             startRegisterActivity();
@@ -77,7 +77,7 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
                     break;
                 case UPDATE_LOCATION_ACTIVITY:
                     Location location = extras.getParcelable("location");
-                    showLocation(location);
+                    setCurrentLocation(location);
                     updateUserLocation(location);
                     break;
             }
@@ -97,7 +97,7 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
         //TODO what provider should we be using and how long should we be polling - config?
         String bestProvider = locationManager.getBestProvider(new LocationManagerProviderCriteria(), true);
         locationManager.requestLocationUpdates(bestProvider, 0, 0,
-                new LocationAutoUpdater(new IntentBuilder(), this, userProvider.getUser(), locationService));
+                new LocationAutoUpdater(new IntentBuilder(), this, userProvider, locationService));
 
         // update this view when location changes
         locationUpdateReceiver = new LocationUpdateReceiver(this);
@@ -126,10 +126,10 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
         shoutButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                String locationTitle = getLabel(ThoughtSquareActivity.this, R.id.current_location);
-
                 Intent intent = new Intent(ThoughtSquareActivity.this, ShoutActivity.class);
-                intent.putExtra("locationTitle", locationTitle);
+                if(currentLocation != null){
+                    intent.putExtra("location", currentLocation);
+                }
                 startActivity(intent);
             }
         });
@@ -139,13 +139,15 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
         setLabel(this, R.id.welcome_label, "Hello " + displayName);
     }
 
-    private void showLocation(Location location) {
+    private void setCurrentLocation(Location location) {
+        this.currentLocation = location;
         setLabel(this, R.id.current_location, location.getTitle());
     }
 
 
+    // called on automatic location update
     public void update(Location location) {
-        showLocation(location);
+        setCurrentLocation(location);
     }
 
     @Override
