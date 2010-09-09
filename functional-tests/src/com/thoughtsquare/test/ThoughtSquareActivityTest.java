@@ -37,16 +37,27 @@ public class ThoughtSquareActivityTest extends ActivityInstrumentationTestCase2<
 
         solo.clickOnButton("Update Location");
         solo.clickInList(1);
+
+        solo.enterText(0, "Aardvark");
+        solo.enterText(1, "5");
+        solo.enterText(1, "6");
+        solo.clickOnButton(0);
+
+        solo.waitForText("Update Location");
+        assertTrue(solo.searchText("Boganville"));
+        solo.clickInList(2);
+
         solo.waitForText("Hello");
-        assertEquals("Brisbane", getText(R.id.current_location));
+        assertEquals("Aardvark", getText(R.id.current_location));
 
         solo.clickOnButton("Shout!");
 
         solo.waitForText("To:");
-        assertEquals("Brisbane", getText(R.id.shoutLocation));
+        assertEquals("Aardvark", getText(R.id.shoutLocation));
         solo.enterText(0, "Eat this for lunch!");
         solo.clickOnButton("Shout!");
 
+        solo.waitForText("Hello");
     }
 
     private String getText(int viewId) {
