@@ -2,7 +2,9 @@ package com.thoughtsquare.service;
 
 import android.content.Context;
 import com.thoughtsquare.domain.AddLocation;
+import com.thoughtsquare.domain.Friend;
 import com.thoughtsquare.domain.Location;
+import com.thoughtsquare.domain.User;
 import com.thoughtsquare.utility.AHTTPClient;
 import com.thoughtsquare.utility.AHTTPResponse;
 import com.thoughtsquare.utility.Config;
@@ -61,5 +63,15 @@ public class LocationService {
             return new Location(id, title, latitude, longitude, CITY_RADIUS);
         }
         return null;
+    }
+
+    //TODO move this to be on Location object
+    public List<Friend> listFriendsAtLocation(int locationId){
+        ArrayList<Friend> friends = new ArrayList<Friend>();
+        AHTTPResponse response = httpClient.get(config.getServerBaseURL() + "/users.json?location_id=" + locationId);
+        if(response.getResponseStatus() == HttpStatus.SC_OK){
+           return new FriendParser().parseFriends(response.getResponseBody());
+        }
+        return friends;
     }
 }

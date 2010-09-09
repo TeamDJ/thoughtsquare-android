@@ -15,6 +15,22 @@ post '/users.json' do
    "}"
 end
 
+get '/users.json' do
+    "["+
+    "{'user':{'created_at':'2010-08-15T08:12:49Z'," +
+      "'updated_at':'2010-08-15T08:12:49Z',"+
+      "'id':18,'display_name':'duana',"+
+     "'email':'foo@gmail.com'," + 
+     "'mobile_number':'0421757702' }},"+
+    "{'user':{'created_at':'2010-08-15T08:12:49Z'," +
+      "'updated_at':'2010-08-15T08:12:49Z',"+
+      "'id':18,'display_name':'james',"+
+     "'email':'bar@gmail.com'," + 
+     "'mobile_number':'1757702' }}"+
+     "]"
+end
+
+
 get '/events.json' do
     date = Time.now.getutc.strftime("%Y-%m-%dT%H:%M:%SZ")
 

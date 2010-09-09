@@ -15,7 +15,11 @@ import com.thoughtsquare.R;
 import com.thoughtsquare.async.BackgroundTask;
 import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.intent.IntentActions;
+import com.thoughtsquare.service.LocationService;
 import com.thoughtsquare.service.ShoutService;
+import com.thoughtsquare.utility.AHTTPClient;
+import com.thoughtsquare.utility.Config;
+import com.thoughtsquare.utility.ConfigLoader;
 import com.thoughtsquare.utility.ViewUtils;
 
 import static com.thoughtsquare.utility.ViewUtils.getTextFromTextBox;
@@ -31,7 +35,11 @@ public class ShoutActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shout);
 
-        shoutService = new ShoutService(SmsManager.getDefault(), this);
+        Config config = new ConfigLoader().getConfig(this);
+        AHTTPClient httpClient = new AHTTPClient();
+        LocationService locationService = new LocationService(config, httpClient);
+
+        shoutService = new ShoutService(locationService, SmsManager.getDefault(), this);
 
         if(getIntent().getExtras() != null && getIntent().getExtras().get("location") !=null){
             location = (Location)getIntent().getExtras().get("location");
@@ -45,8 +53,11 @@ public class ShoutActivity extends Activity {
             public void onClick(View view) {
                 spinner = new ProgressDialog(ShoutActivity.this);
                 spinner.setMessage("Sending SMS...");
-                shoutService.sendSMS(3, getTextFromTextBox(ShoutActivity.this,R.id.shoutMessage));
-                spinner.show();
+                if(location != null){
+                    spinner.show();
+                    shoutService.sendSMS(location.getId(), getTextFromTextBox(ShoutActivity.this,R.id.shoutMessage));
+                    spinner.dismiss();
+                }
             }
 
         });
@@ -54,7 +65,6 @@ public class ShoutActivity extends Activity {
         registerReceiver(new BroadcastReceiver(){
             @Override
             public void onReceive(Context arg0, Intent arg1) {
-                spinner.dismiss();
 
                 switch (getResultCode())
                 {
