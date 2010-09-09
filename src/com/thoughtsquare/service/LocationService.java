@@ -60,7 +60,8 @@ public class LocationService {
 
         AHTTPResponse response = httpClient.post(config.getServerBaseURL() + "/locations.json", postParams);
 
-        if (response.getResponseStatus() == HttpStatus.SC_CREATED) {
+        if (response.getResponseStatus() == HttpStatus.SC_CREATED
+              || response.getResponseStatus() == HttpStatus.SC_OK) {
             int id = response.getJSONResponse().getJSONObject("location").getInt("id");
             return new Location(id, title, latitude, longitude, CITY_RADIUS);
         }

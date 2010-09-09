@@ -40,3 +40,8 @@ end
 get '/locations.json' do
    '[{"location":{"latitude":1.5,"created_at":"2010-09-05T08:05:00Z","title":"three","updated_at":"2010-09-05T08:05:00Z","id":113629430,"longitude":1.5}},{"location":{"latitude":1.5,"created_at":"2010-09-05T08:05:00Z","title":"two","updated_at":"2010-09-05T08:05:00Z","id":298486374,"longitude":1.5}},{"location":{"latitude":1.5,"created_at":"2010-09-05T08:05:00Z","title":"one","updated_at":"2010-09-05T08:05:00Z","id":980190962,"longitude":1.5}},{"location":{"latitude":454.0,"created_at":"2010-09-09T11:51:34Z","title":"dsfdf","updated_at":"2010-09-09T11:51:34Z","id":980190963,"longitude":55565.0}}]' 
 end
+
+post '/locations.json' do
+    status 201
+    '{"location":{"latitude":77.0,"created_at":"2010-09-09T14:53:54Z","title":"Byron","updated_at":"2010-09-09T14:53:54Z","id":980190965,"longitude":99.0}}'
+end
