@@ -6,3 +6,6 @@ build/
 out/
 local.properties
 functional-tests/${gen.dir}/
+thoughtsquare-android.iml
+.DS_store
+thoughtsquare-android.iml
