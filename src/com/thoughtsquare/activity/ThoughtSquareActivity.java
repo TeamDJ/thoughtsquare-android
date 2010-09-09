@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import com.thoughtsquare.R;
-import com.thoughtsquare.async.UpdateLocationTask;
+import com.thoughtsquare.async.BackgroundTask;
 import com.thoughtsquare.criteria.LocationManagerProviderCriteria;
 import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.domain.User;
@@ -20,9 +20,6 @@ import com.thoughtsquare.intent.OnLocationUpdate;
 import com.thoughtsquare.service.LocationService;
 import com.thoughtsquare.service.NotificationService;
 import com.thoughtsquare.utility.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 import static com.thoughtsquare.intent.IntentActions.LOCATION_UPDATED;
@@ -84,10 +81,13 @@ public class ThoughtSquareActivity extends Activity implements OnLocationUpdate 
         }
     }
 
-    private void updateUserLocation(Location location) {
-        Map<User, Location> userLocation = new HashMap<User, Location>();
-        userLocation.put(userProvider.getUser(), location);
-        new UpdateLocationTask().execute(userLocation);
+    private void updateUserLocation(final Location location) {
+        final User user = userProvider.getUser();
+        new BackgroundTask(){
+            public void run() {
+                user.updateLocation(location);
+            }
+        };
     }
 
 
