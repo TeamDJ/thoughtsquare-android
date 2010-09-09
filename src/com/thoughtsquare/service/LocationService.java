@@ -5,10 +5,7 @@ import com.thoughtsquare.domain.AddLocation;
 import com.thoughtsquare.domain.Friend;
 import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.domain.User;
-import com.thoughtsquare.utility.AHTTPClient;
-import com.thoughtsquare.utility.AHTTPResponse;
-import com.thoughtsquare.utility.Config;
-import com.thoughtsquare.utility.ConfigLoader;
+import com.thoughtsquare.utility.*;
 import org.apache.http.HttpStatus;
 
 import java.util.ArrayList;
@@ -32,13 +29,18 @@ public class LocationService {
     public List<Location> getLocations() {
         List<Location> locations = new ArrayList<Location>();
 
-        locations.add(new Location(1, "Brisbane", -27.467581, 153.027893, CITY_RADIUS));
-        locations.add(new Location(2, "Sydney", -33.867138, 151.207108, CITY_RADIUS));
-        locations.add(new Location(3, "Melbourne", -37.814251, 144.963165, CITY_RADIUS));
-        locations.add(new Location(4, "Perth", -31.9554, 115.858589, CITY_RADIUS));
-        locations.add(new AddLocation());
-
+        AHTTPResponse response = httpClient.get(config.getServerBaseURL() + "/locations.json");
+        if(response.getResponseStatus() == HttpStatus.SC_OK){
+           return new LocationParser().parseLocations(response.getResponseBody());
+        }
         return locations;
+//
+//        locations.add(new Location(1, "Brisbane", -27.467581, 153.027893, CITY_RADIUS));
+//        locations.add(new Location(2, "Sydney", -33.867138, 151.207108, CITY_RADIUS));
+//        locations.add(new Location(3, "Melbourne", -37.814251, 144.963165, CITY_RADIUS));
+//        locations.add(new Location(4, "Perth", -31.9554, 115.858589, CITY_RADIUS));
+//        locations.add(new AddLocation());
+
     }
 
     public Location findContainingLocation(android.location.Location location) {

@@ -2,6 +2,7 @@ package com.thoughtsquare.domain;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import com.thoughtsquare.utility.JSONArray;
 
 public class Location implements Parcelable {
     private int id;
@@ -21,6 +22,9 @@ public class Location implements Parcelable {
     public Location(Parcel parcel) {
         this(parcel.readInt(), parcel.readString(), parcel.readDouble(), parcel.readDouble(), parcel.readFloat());
     }
+
+
+
 
     public int getId() {
         return id;

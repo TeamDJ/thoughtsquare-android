@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.thoughtsquare.R;
+import com.thoughtsquare.async.WaitTask;
 import com.thoughtsquare.domain.AddLocation;
 import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.service.LocationService;
@@ -28,12 +29,20 @@ public class UpdateLocationActivity extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        LocationService locationService = new LocationService( new ConfigLoader().getConfig(this), new AHTTPClient());
-        locations = locationService.getLocations();
-
         setContentView(R.layout.update_location);
-        setListAdapter(new LocationAdapter());
+
+        final LocationService locationService = new LocationService( new ConfigLoader().getConfig(this), new AHTTPClient());
+
+        new WaitTask<List<Location>>(this, "Fetching locations..."){
+            protected List<Location> run() {
+                return locationService.getLocations();
+            }
+            protected void doAfter(List<Location> locations) {
+                locations.add(new AddLocation());
+                UpdateLocationActivity.this.locations = locations;
+                setListAdapter(new LocationAdapter());
+            }
+        }.execute();
     }
 
     @Override

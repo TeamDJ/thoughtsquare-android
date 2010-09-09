@@ -37,3 +37,6 @@ get '/events.json' do
     '[{"event":{"description":"Framber has arrived in Brisbane","title":"new smurf on your turf","user_id":298486374,"location_id":113629430,"when":"'+ date +'","event_type":"arrive"}}]'
 end
 
+get '/locations.json' do
+   '[{"location":{"latitude":1.5,"created_at":"2010-09-05T08:05:00Z","title":"three","updated_at":"2010-09-05T08:05:00Z","id":113629430,"longitude":1.5}},{"location":{"latitude":1.5,"created_at":"2010-09-05T08:05:00Z","title":"two","updated_at":"2010-09-05T08:05:00Z","id":298486374,"longitude":1.5}},{"location":{"latitude":1.5,"created_at":"2010-09-05T08:05:00Z","title":"one","updated_at":"2010-09-05T08:05:00Z","id":980190962,"longitude":1.5}},{"location":{"latitude":454.0,"created_at":"2010-09-09T11:51:34Z","title":"dsfdf","updated_at":"2010-09-09T11:51:34Z","id":980190963,"longitude":55565.0}}]' 
+end
