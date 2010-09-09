@@ -6,34 +6,26 @@ import android.content.Intent;
 import android.telephony.SmsManager;
 import com.thoughtsquare.domain.Friend;
 import com.thoughtsquare.intent.IntentActions;
+import com.thoughtsquare.utility.SmsManagerWrapper;
 
 import java.util.List;
 
 public class ShoutService {
     private LocationService locationService;
-    private SmsManager smsManager;
+    private SmsManagerWrapper smsManager;
     private Context context;
 
-    public ShoutService(LocationService locationService, SmsManager smsManager, Context context) {
+    public ShoutService(LocationService locationService, SmsManagerWrapper smsManager, Context context) {
         this.locationService = locationService;
         this.smsManager = smsManager;
         this.context = context;
     }
 
     public void sendSMS(int locationId, String message) {
-
         List<Friend> friends = locationService.listFriendsAtLocation(locationId);
-
         for (Friend friend: friends){
-            PendingIntent sentPI = PendingIntent.getBroadcast(context, 0,
-            new Intent(IntentActions.SENT), 0);
-
-            PendingIntent deliveredPI = PendingIntent.getBroadcast(context, 0,
-                new Intent(IntentActions.DELIVERED), 0);
-            smsManager.sendTextMessage(friend.getMobileNumber(), null, message, sentPI, deliveredPI);
+            smsManager.sendTextMessage(friend.getMobileNumber(), null, message);
         }
-
-
         
     }
 }

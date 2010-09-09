@@ -17,10 +17,7 @@ import com.thoughtsquare.domain.Location;
 import com.thoughtsquare.intent.IntentActions;
 import com.thoughtsquare.service.LocationService;
 import com.thoughtsquare.service.ShoutService;
-import com.thoughtsquare.utility.AHTTPClient;
-import com.thoughtsquare.utility.Config;
-import com.thoughtsquare.utility.ConfigLoader;
-import com.thoughtsquare.utility.ViewUtils;
+import com.thoughtsquare.utility.*;
 
 import static com.thoughtsquare.utility.ViewUtils.getTextFromTextBox;
 import static com.thoughtsquare.utility.ViewUtils.setLabel;
@@ -38,8 +35,8 @@ public class ShoutActivity extends Activity {
         Config config = new ConfigLoader().getConfig(this);
         AHTTPClient httpClient = new AHTTPClient();
         LocationService locationService = new LocationService(config, httpClient);
-
-        shoutService = new ShoutService(locationService, SmsManager.getDefault(), this);
+        SmsManagerWrapper smsManagerWrapper = new SmsManagerWrapper(SmsManager.getDefault(), this);
+        shoutService = new ShoutService(locationService, smsManagerWrapper, this);
 
         if(getIntent().getExtras() != null && getIntent().getExtras().get("location") !=null){
             location = (Location)getIntent().getExtras().get("location");

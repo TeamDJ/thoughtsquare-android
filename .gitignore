@@ -9,3 +9,4 @@ functional-tests/${gen.dir}/
 thoughtsquare-android.iml
 .DS_store
 thoughtsquare-android.iml
+functional-tests/functional-tests.iml
