@@ -34,7 +34,7 @@ public class UpdateLocationActivity extends ListActivity {
         final LocationService locationService = new LocationService( new ConfigLoader().getConfig(this), new AHTTPClient());
 
         new WaitTask<List<Location>>(this, "Fetching locations..."){
-            protected List<Location> run() {
+            protected List<Location> doStuff() {
                 return locationService.getLocations();
             }
             protected void doAfter(List<Location> locations) {

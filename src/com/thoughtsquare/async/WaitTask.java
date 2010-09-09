@@ -19,10 +19,10 @@ public abstract class WaitTask<Result> extends AsyncTask<Void, Void, Result> {
 
     @Override
     protected final Result doInBackground(Void... stupidvoids) {
-        return run();
+        return doStuff();
     }
 
-    protected abstract Result run();
+    protected abstract Result doStuff();
 
     @Override
     protected final void onPostExecute(Result result) {

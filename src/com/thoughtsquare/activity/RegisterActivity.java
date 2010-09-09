@@ -64,7 +64,7 @@ public class RegisterActivity extends Activity {
 
 
                 new WaitTask<Boolean>(RegisterActivity.this, "Registering..."){
-                    protected Boolean run() {
+                    protected Boolean doStuff() {
                         return user.register();
                     }
 
