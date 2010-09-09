@@ -18,12 +18,14 @@ import com.thoughtsquare.service.LocationService;
 import com.thoughtsquare.utility.AHTTPClient;
 import com.thoughtsquare.utility.ConfigLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UpdateLocationActivity extends ListActivity {
     private static final int ADD_LOCATION_ACTIVITY = 0;
 
     private List<Location> locations;
+    private LocationService locationService;
 
 
     @Override
@@ -31,15 +33,21 @@ public class UpdateLocationActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.update_location);
 
-        final LocationService locationService = new LocationService( new ConfigLoader().getConfig(this), new AHTTPClient());
+        locationService = new LocationService( new ConfigLoader().getConfig(this), new AHTTPClient());
 
+        locations = new ArrayList<Location>();
+        locations.add(new AddLocation());
+
+        populateLocations(locationService);
+    }
+
+    private void populateLocations(final LocationService locationService) {
         new WaitTask<List<Location>>(this, "Fetching locations..."){
             protected List<Location> doStuff() {
                 return locationService.getLocations();
             }
             protected void doAfter(List<Location> locations) {
-                locations.add(new AddLocation());
-                UpdateLocationActivity.this.locations = locations;
+                UpdateLocationActivity.this.locations.addAll(locations);
                 setListAdapter(new LocationAdapter());
             }
         }.execute();
@@ -50,7 +58,7 @@ public class UpdateLocationActivity extends ListActivity {
         Location location = locations.get(position);
 
         if (location instanceof AddLocation) {
-            Intent i = new Intent(getContext(), AddLocationActivity.class);
+            Intent i = new Intent(this, AddLocationActivity.class);
             startActivityForResult(i, ADD_LOCATION_ACTIVITY);
         } else {
             Bundle extras = new Bundle();
@@ -71,10 +79,7 @@ public class UpdateLocationActivity extends ListActivity {
             switch (requestCode) {
                 case ADD_LOCATION_ACTIVITY:
                     Location location = extras.getParcelable("location");
-                    AddLocation addLocation = (AddLocation) locations.get(locations.size() - 1);
-                    locations.remove(addLocation);
                     locations.add(location);
-                    locations.add(addLocation);
                     break;
             }
         }
@@ -97,7 +102,4 @@ public class UpdateLocationActivity extends ListActivity {
         }
     }
 
-    private Context getContext() {
-        return this;
-    }
 }
