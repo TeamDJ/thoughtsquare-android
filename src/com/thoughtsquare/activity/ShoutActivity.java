@@ -1,29 +1,37 @@
 package com.thoughtsquare.activity;
 
 import android.app.Activity;
-import android.os.AsyncTask;
+import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 import com.thoughtsquare.R;
+import com.thoughtsquare.async.BackgroundTask;
 import com.thoughtsquare.domain.Location;
-import com.thoughtsquare.domain.User;
-import com.thoughtsquare.domain.UserProvider;
+import com.thoughtsquare.intent.IntentActions;
 import com.thoughtsquare.service.ShoutService;
 import com.thoughtsquare.utility.ViewUtils;
 
+import static com.thoughtsquare.utility.ViewUtils.getTextFromTextBox;
 import static com.thoughtsquare.utility.ViewUtils.setLabel;
 
 public class ShoutActivity extends Activity {
     private ShoutService shoutService;
     private Location location;
+    ProgressDialog spinner;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shout);
 
-        shoutService = new ShoutService();
+        shoutService = new ShoutService(SmsManager.getDefault(), this);
 
         if(getIntent().getExtras() != null && getIntent().getExtras().get("location") !=null){
             location = (Location)getIntent().getExtras().get("location");
@@ -35,13 +43,64 @@ public class ShoutActivity extends Activity {
         shoutButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                //TODO require a location - will need to select one if user's current location is not known.
-                if(location!=null){
-                    shoutService.sendSMS(location.getId());
-                }
-                finish();
+                spinner = new ProgressDialog(ShoutActivity.this);
+                spinner.setMessage("Sending SMS...");
+                shoutService.sendSMS(3, getTextFromTextBox(ShoutActivity.this,R.id.shoutMessage));
+                spinner.show();
             }
+
         });
+
+        registerReceiver(new BroadcastReceiver(){
+            @Override
+            public void onReceive(Context arg0, Intent arg1) {
+                spinner.dismiss();
+
+                switch (getResultCode())
+                {
+                    case Activity.RESULT_OK:
+                        makeToast("SMS sent");
+                        finish();
+                        break;
+                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                        String text = "Generic failure";
+                        makeToast(text);
+                        break;
+                    case SmsManager.RESULT_ERROR_NO_SERVICE:
+                        makeToast("No service");
+                        break;
+                    case SmsManager.RESULT_ERROR_NULL_PDU:
+                        makeToast("Null PDU");
+                        break;
+                    case SmsManager.RESULT_ERROR_RADIO_OFF:
+                        makeToast("Radio off");
+                        break;
+                }
+            }
+        }, new IntentFilter(IntentActions.SENT));
+
+        //---when the SMS has been delivered---
+        registerReceiver(new BroadcastReceiver(){
+            @Override
+            public void onReceive(Context arg0, Intent arg1) {
+                switch (getResultCode())
+                {
+                    case Activity.RESULT_OK:
+                        makeToast("SMS delivered");
+
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        makeToast("SMS not delivered");
+                        break;
+                }
+
+            }
+        }, new IntentFilter(IntentActions.DELIVERED));
+    }
+
+    private void makeToast(String text) {
+        Toast.makeText(getBaseContext(), text,
+                Toast.LENGTH_LONG).show();
     }
 
 
